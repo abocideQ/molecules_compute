@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include "qclickqlabel.h"
 #include "qcustomplot.h"
-#include "gmp/gmp.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }

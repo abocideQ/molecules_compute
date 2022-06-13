@@ -20,27 +20,30 @@ SOURCES += \
     mainwindow.cpp \
     qclickqlabel.cpp \
     qcustomplot.cpp \
-#    core/XYModel.h \
     core/ParseX.cpp \
     core/ParseA.cpp \
     core/MergeXA.cpp \
     core/ComputeQ.cpp \
-#    core/FileUtils.h \
-#    core/FileWriter.h \
-#    core/DecimalUtils.h \
+#    core/XYModel.cpp \
+#    core/FileUtils.cpp \
+#    core/FileWriter.cpp \
+#    core/DecimalUtils.cpp \
+    core/LongDouble.cpp \
+#    gmp/gmp.cpp \
 
 HEADERS += \
     mainwindow.h \
     qclickqlabel.h \
     qcustomplot.h \
-    core/XYModel.h \
     core/ParseX.h \
     core/ParseA.h \
     core/MergeXA.h \
     core/ComputeQ.h \
+    core/XYModel.h \
     core/FileUtils.h \
     core/FileWriter.h \
     core/DecimalUtils.h \
+    core/LongDouble.h \
     gmp/gmp.h \
 
 FORMS += \
