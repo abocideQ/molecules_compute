@@ -34,11 +34,11 @@ void MainWindow::initWidgetTop(){
     //    layout_top->setSizeConstraint(QLayout::SetMaximumSize);
     //    layout_top->setMargin(10);
     //    layout_top->setSpacing(0);
-    m_pLabel_file_basic = new QClickQLabel("基态");
+    m_pLabel_file_basic = new QClickQLabel("X & A");
     m_pLabel_file_basic->setMinimumWidth(60);
     m_pLabel_file_basic->setMaximumHeight(36);
     m_pLabel_file_basic->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    m_pLabel_file_excitation = new QClickQLabel("激发态");
+    m_pLabel_file_excitation = new QClickQLabel("Q");
     m_pLabel_file_excitation->setMinimumWidth(60);
     m_pLabel_file_excitation->setMaximumHeight(36);
     m_pLabel_file_excitation->setAlignment(Qt::AlignmentFlag::AlignCenter);
