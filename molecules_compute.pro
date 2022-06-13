@@ -20,6 +20,7 @@ SOURCES += \
     mainwindow.cpp \
     qclickqlabel.cpp \
     qcustomplot.cpp \
+    brigde.cpp \
     core/ParseX.cpp \
     core/ParseA.cpp \
     core/MergeXA.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     mainwindow.h \
     qclickqlabel.h \
     qcustomplot.h \
+    brigde.h \
     core/ParseX.h \
     core/ParseA.h \
     core/MergeXA.h \
