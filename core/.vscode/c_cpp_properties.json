@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "name": "WinConsole",
+      "intelliSenseMode": "clang-x64",
+      "compilerPath": "D:/Project_QT/Qt6.2.4/Tools/mingw1120_64/bin/g++.exe",
+      "cStandard": "c11",
+      "cppStandard": "c++17",
+      "includePath": [
+        "${workspaceFolder}",
+        "${workspaceFolder}/**",
+        "D:/Project_QT/Qt6.2.4/Tools/mingw1120_64/include"
+      ],
+      "browse": {
+        "path": [
+          "${workspaceFolder}",
+          "${workspaceFolder}/**",
+          "D:/Project_QT/Qt6.2.4/Tools/mingw1120_64/include"
+        ],
+        "limitSymbolsToIncludedHeaders": true,
+        "databaseFilename": ""
+      },
+      "defines": [
+        "_DEBUG",
+        "UNICODE",
+        "_UNICODE"
+      ]
+    }
+  ],
+  "version": 4
+}

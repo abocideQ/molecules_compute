@@ -1,0 +1,110 @@
+{ /*VSCODE用户设置*/
+    /* "files.defaultLanguage": "c", // ctrl+N新建文件后默认的语言
+    "editor.formatOnType": true, // 输入分号(C/C++的语句结束标识)后自动格式化当前这一行的代码
+    "editor.suggest.snippetsPreventQuickSuggestions": false, // clangd的snippets有很多的跳转点，不用这个就必须手动触发Intellisense了
+    "editor.acceptSuggestionOnEnter": "off", // 我个人的习惯，按回车时一定是真正的换行，只有tab才会接受Intellisense
+    // "editor.snippetSuggestions": "top", // （可选）snippets显示在补全列表顶端，默认是inline
+    "code-runner.runInTerminal": true, // 设置成false会在“输出”中输出，无法输入
+    "code-runner.executorMap": {
+        "c": "gcc '$fileName' -o '$fileNameWithoutExt.exe' -Wall -O2 -m64 -lm -static-libgcc -fexec-charset=GBK -D__USE_MINGW_ANSI_STDIO && &'./$fileNameWithoutExt.exe'",
+        "cpp": "g++ '$fileName' -o '$fileNameWithoutExt.exe' -Wall -O2 -m64 -static-libgcc -fexec-charset=GBK && &'./$fileNameWithoutExt.exe'"
+        // "c": "gcc $fileName -o $fileNameWithoutExt.exe -Wall -O2 -m64 -lm -static-libgcc -fexec-charset=GBK -D__USE_MINGW_ANSI_STDIO && $dir$fileNameWithoutExt.exe",
+        // "cpp": "g++ $fileName -o $fileNameWithoutExt.exe -Wall -O2 -m64 -static-libgcc -fexec-charset=GBK && $dir$fileNameWithoutExt.exe"
+    }, // 右键run code时运行的命令；未注释的仅适用于PowerShell（Win10默认）和pwsh，文件名中有空格也可以编译运行；注释掉的适用于cmd（win7默认）、PS和bash，但文件名中有空格时无法运行
+    "code-runner.saveFileBeforeRun": true, // run code前保存
+    "code-runner.preserveFocus": true, // 若为false，run code后光标会聚焦到终端上。如果需要频繁输入数据可设为false
+    "code-runner.clearPreviousOutput": false, // 每次run code前清空属于code runner的终端消息，默认false
+    "code-runner.ignoreSelection": true, // 默认为false，效果是鼠标选中一块代码后可以单独执行，但C是编译型语言，不适合这样用
+    "code-runner.fileDirectoryAsCwd": true, // 将code runner终端的工作目录切换到文件目录再运行，对依赖cwd的程序产生影响；如果为false，executorMap要加cd $dir
+    **/
+    /*
+    *格式化
+    **/
+    //格式化时调整include的顺序（按字母排序）
+    // "C_Cpp.clang_format_sortIncludes": true,
+    // "files.associations": {
+    //     "iostream": "cpp",
+    //     "fstream": "cpp",
+    //     "vector": "cpp"
+    // },
+    /*
+    *文件保存
+    * onFocusChange => 当前文件失去焦点后自动保存
+    * onWindowChange => 需要当前 VScode 窗口失去焦点才会自动保存
+    * afterDelay => 与 files.autoSaveDelay 配置联动，也就是在间隔多少毫秒自动保存，默认「1000毫秒」，有个小细节，如果配置了保存格式化代码，这个配置下自动保存不会格式化代码
+    **/
+    "files.autoSave": "onWindowChange",
+    "files.autoSaveDelay": 2000,
+    // 配置 Tab 空格数
+    "editor.tabSize": 2,
+    // 保存自动格式化代码
+    "editor.formatOnSave": true,
+    // 粘贴自动格式化
+    "editor.formatOnPaste": true,
+    // 可以为不同语言或文档单独配置
+    "[typescript]": {
+        "editor.formatOnSave": false
+    },
+    "[markdown]": {
+        "editor.formatOnSave": true
+    },
+    "files.associations": {
+        "array": "cpp",
+        "atomic": "cpp",
+        "*.tcc": "cpp",
+        "cctype": "cpp",
+        "clocale": "cpp",
+        "cmath": "cpp",
+        "cstdarg": "cpp",
+        "cstddef": "cpp",
+        "cstdint": "cpp",
+        "cstdio": "cpp",
+        "cstdlib": "cpp",
+        "cwchar": "cpp",
+        "cwctype": "cpp",
+        "deque": "cpp",
+        "unordered_map": "cpp",
+        "vector": "cpp",
+        "exception": "cpp",
+        "algorithm": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp",
+        "memory": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "string": "cpp",
+        "system_error": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "fstream": "cpp",
+        "initializer_list": "cpp",
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "istream": "cpp",
+        "limits": "cpp",
+        "new": "cpp",
+        "ostream": "cpp",
+        "sstream": "cpp",
+        "stdexcept": "cpp",
+        "streambuf": "cpp",
+        "typeinfo": "cpp",
+        "thread": "cpp",
+        "chrono": "cpp",
+        "ctime": "cpp",
+        "ratio": "cpp",
+        "bit": "cpp",
+        "compare": "cpp",
+        "concepts": "cpp",
+        "string_view": "cpp",
+        "numbers": "cpp",
+        "list": "cpp",
+        "cstring": "cpp",
+        "iomanip": "cpp",
+        "complex": "cpp",
+        "cinttypes": "cpp",
+        "semaphore": "cpp",
+        "stop_token": "cpp"
+    }
+}
