@@ -137,7 +137,7 @@ void MainWindow::on_menu_file_x_a()
         if (!ret_ok || file_1_g.isEmpty()){
             return;
         }
-        float file_1_t = QInputDialog::getText(this, tr("A态温度"),tr("请输入A态的温度（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+        float file_1_t = QInputDialog::getText(this, tr("A态跃迁值"),tr("请输入A态的跃迁值Te（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
         if (!ret_ok || file_1_t < 0){
             return;
         }
@@ -151,7 +151,7 @@ void MainWindow::on_menu_file_x_a()
         if (!ret_ok || file_2_g.isEmpty()){
             return;
         }
-        float file_2_t = QInputDialog::getText(this, tr("B态温度"),tr("请输入B态的温度（请输入数字）"), QLineEdit::Normal,0, &ret_ok).toFloat();
+        float file_2_t = QInputDialog::getText(this, tr("B态跃迁值"),tr("请输入B态的跃迁值T（请输入数字）"), QLineEdit::Normal,0, &ret_ok).toFloat();
         if (!ret_ok || file_2_t < 0){
             return;
         }
@@ -193,23 +193,74 @@ void MainWindow::on_menu_file_x_a()
 void MainWindow::on_menu_file_q()
 {
     try {
-        bool ret_ok;
-        //常量h
-        long double const_h = 0;
-        string const_h_str = QInputDialog::getText(this, tr("常量h"),tr("请输入常量h(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
-        if (!ret_ok || const_h_str.empty()){
-            return;
+        while(1){
+            bool ret_ok;
+            //A态
+            QString file_q_g = QInputDialog::getText(this, tr("X态名称"),tr("请输入X态的名称"), QLineEdit::Normal, 0, &ret_ok);
+            if (!ret_ok || file_q_g.isEmpty()){
+                goto __Exit;
+            }
+            float file_q_Te = QInputDialog::getText(this, tr("X态跃迁值"),tr("请输入X态的跃迁值Te（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || file_q_Te < 0){
+                return;
+            }
+            QString file_q_url = QFileDialog::getOpenFileName(this, "请选择A态文件", "", "All files(*.*)");
+            if (file_q_url.isEmpty()){
+                goto __Exit;
+            }
+            //常量h
+            long double const_h = 0;
+            string const_h_str = QInputDialog::getText(this, tr("常量h"),tr("请输入常量h(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
+            if (!ret_ok || const_h_str.empty()){
+                goto __Exit;
+            }
+            const_h = ENumber(const_h_str);
+            qDebug()<< "h: " << QString::number(const_h, 2, 50);
+            //常量c
+            long double const_c = 0;
+            string const_c_str = QInputDialog::getText(this, tr("常量c"),tr("请输入常量c(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
+            if (!ret_ok || const_c_str.empty()){
+                goto __Exit;
+            }
+            const_c = ENumber(const_c_str);
+            //常量K
+            long double const_K = 0;
+            string const_K_str = QInputDialog::getText(this, tr("常量K"),tr("请输入常量K(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
+            if (!ret_ok || const_K_str.empty()){
+                goto __Exit;
+            }
+            const_K = ENumber(const_K_str);
+            //Tex Tvib Trot
+            float const_Tssss = QInputDialog::getText(this, tr("温度"),tr("请输入温度（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || const_Tssss < 0){
+                return;
+            }
+            //gne
+            float const_gne = QInputDialog::getText(this, tr("偶数时的值"),tr("请输入偶数时的值(gne)"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || const_gne < 0){
+                return;
+            }
+            //gno
+            float const_gno = QInputDialog::getText(this, tr("奇数时的值"),tr("请输入奇数时的值(gno)"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || const_gno < 0){
+                return;
+            }
+            //gbase
+            float const_gbase = QInputDialog::getText(this, tr("gj倍数"),tr("请输入gj倍数"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || const_gbase < 0){
+                return;
+            }
+            QByteArray bytes = file_q_url.toLocal8Bit();//.toLatin1().data() 无效
+            char *file_url_char = new char[1024];
+    //        memcpy(file_url_char, bytes.data(), bytes.size()+1);  //存放结束符
+            strcpy(file_url_char ,bytes.data());
+            m_pBrigde->add_q_info(file_q_g.toStdString(), file_q_Te, file_url_char,
+                                  const_h, const_c, const_K, const_Tssss, const_Tssss,const_Tssss,
+                                  const_gne, const_gno, const_gbase);
+            qDebug()<< "c: " << QString::number(const_c, 10, 50);
         }
-        const_h = ENumber(const_h_str);
-        qDebug()<< "h: " << QString::number(const_h, 2, 50);
-        //常量c
-        long double const_c = 0;
-        string const_c_str = QInputDialog::getText(this, tr("常量c"),tr("请输入常量c(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
-        if (!ret_ok || const_c_str.empty()){
-            return;
-        }
-        const_c = ENumber(const_c_str);
-        qDebug()<< "c: " << QString::number(const_c, 10, 50);
+        __Exit:
+         qDebug()<< "done";
     } catch (QException e) {
         qDebug("%s", e.what());
     }
@@ -218,7 +269,7 @@ void MainWindow::on_menu_file_q()
 void MainWindow::on_menu_build()
 {
     vector<XModel> vec_x = m_pBrigde->compute_x_a();
-    //plot
+    //x & a
     QVector<double> m_x(vec_x.size()), m_y(vec_x.size());
     for (size_t i = 0; i < vec_x.size(); i++)
     {
@@ -228,6 +279,8 @@ void MainWindow::on_menu_build()
     m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
     m_pQCumstomPlot->graph(0)->rescaleAxes();
     m_pQCumstomPlot->replot();
+    //Q
+    m_pBrigde->compute_q();
 }
 
 MainWindow::~MainWindow()

@@ -19,6 +19,7 @@ private:
   vector<VJModel> m_vec_Fj;
   long double const_h = 0;
   long double const_c = 0;
+  long double const_Te = 0;
   long double const_KTex = 0;
   long double sumQe();
   long double const_KTvib = 0;

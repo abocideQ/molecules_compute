@@ -11,7 +11,7 @@
 #include "ParseX.h"
 #include "XYModel.h"
 
-vector<XModel> ParseX::XVector(string g1, float t1, char *pUrl1, string g2, float t2, char *pUrl2)
+vector<XModel> ParseX::XVector(string g1, float t1,string pUrl1, string g2, float t2, string pUrl2)
 {
   vector<XModel> ret_ = vector<XModel>();
   vector<VJModel> vec_vj1 = ParseStr2VJ(g1, t1, pUrl1);
@@ -68,11 +68,11 @@ vector<XModel> ParseX::XVector(string g1, float t1, char *pUrl1, string g2, floa
   return ret_;
 }
 
-vector<VJModel> ParseX::ParseStr2VJ(string g, float t, char *pUrl)
+vector<VJModel> ParseX::ParseStr2VJ(string g, float t, string pUrl)
 {
   vector<VJModel> ret_ = vector<VJModel>();
   FileUtils m_reader = FileUtils();
-  std::vector<std::vector<float>> datas = m_reader.Load(pUrl);
+  std::vector<std::vector<float>> datas = m_reader.Load(pUrl.data());
   for (size_t i = 0; i < datas.size(); i++)
   {
     std::vector<float> data = datas[i];

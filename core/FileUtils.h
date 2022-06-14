@@ -8,7 +8,7 @@
 class FileUtils
 {
 public:
-  std::vector<std::vector<float>> Load(char *pFileUrl)
+  std::vector<std::vector<float>> Load(const char *pFileUrl)
   {
     std::vector<std::vector<float>> ret_;
     std::ifstream ifs;
@@ -27,7 +27,7 @@ public:
     return ret_;
   }
 
-  std::vector<std::vector<std::string>> Load(char *pFileUrl, char *pSplit)
+  std::vector<std::vector<std::string>> Load(const char *pFileUrl, char *pSplit)
   {
     std::vector<std::vector<std::string>> ret_;
     std::string str_split = pSplit;

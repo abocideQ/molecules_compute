@@ -1,6 +1,6 @@
 #include "ParseA.h"
 
-vector<AModel> ParseA::AVector(char *pUrl)
+vector<AModel> ParseA::AVector(string pUrl)
 {
   vector<AModel> ret_ = vector<AModel>();
   std::ifstream ifs;

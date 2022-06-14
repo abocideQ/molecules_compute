@@ -39,7 +39,7 @@ long double ComputeQ::sumQ()
 long double ComputeQ::sumQe()
 {
   long double ret_Qe = 0;
-  long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_Te[0].t) / (const_KTex))) * sumQv();
+  long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_x[0].t) / (const_KTex))) * sumQv();
   ret_Qe = DecimalUtils::sum_(ret_Qe, exp);
   std::cout << "Qe = " << ret_Qe << endl;
   return ret_Qe;
