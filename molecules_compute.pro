@@ -24,6 +24,7 @@ SOURCES += \
     core/ParseX.cpp \
     core/ParseA.cpp \
     core/MergeXA.cpp \
+    core/ComputeQevj.cpp \
     core/ComputeQ.cpp \
 #    core/XYModel.cpp \
 #    core/FileUtils.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     core/ParseX.h \
     core/ParseA.h \
     core/MergeXA.h \
+    core/ComputeQevj.h \
     core/ComputeQ.h \
     core/XYModel.h \
     core/FileUtils.h \

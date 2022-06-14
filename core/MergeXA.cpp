@@ -2,12 +2,6 @@
 
 vector<XModel> MergeXA::Merge(vector<XModel> x_vec, vector<AModel> a_vec)
 {
-  std::cout << " === "
-            << "x_vec.size="
-            << x_vec.size()
-            << " "
-            << "a_vec.size="
-            << a_vec.size() << " === " << std::endl;
   for (size_t i = 0; i < x_vec.size(); i++)
   {
     XModel x_model = x_vec[i];

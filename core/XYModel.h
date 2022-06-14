@@ -41,6 +41,7 @@ typedef struct _XModel
 
   float x;
   float a;
+  long double Qevj;
 } XModel;
 
 typedef struct _QModel

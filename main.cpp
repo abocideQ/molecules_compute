@@ -4,6 +4,13 @@
 
 int main(int argc, char *argv[])
 {
+    QApplication a(argc, argv);
+    MainWindow *window = new MainWindow;
+    window->show();
+    return a.exec();
+}
+
+void init_gmp(){
     //=====================mpf
     //初始化
 //    mpf_t mp_float;
@@ -37,8 +44,4 @@ int main(int argc, char *argv[])
 //       qDebug(std::to_string(mpq_get_d(mp_qua)).c_str());
 //       char *sss = mpq_get_str(nullptr, 10 ,mp_qua);
 //       qDebug(sss);
-    QApplication a(argc, argv);
-    MainWindow *window = new MainWindow;
-    window->show();
-    return a.exec();
 }
