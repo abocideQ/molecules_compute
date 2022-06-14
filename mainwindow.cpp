@@ -166,30 +166,25 @@ void MainWindow::on_menu_file_x_a()
             return;
         }
         //save
-        QByteArray bytes_1 = file_1_url.toLatin1();
-        QByteArray bytes_2 = file_2_url.toLatin1();
-        QByteArray bytes_a = file_a_url.toLatin1();
-        char *_1_url = bytes_1.data();
-        char *_2_url = bytes_2.data();
-        char *_a_url = bytes_a.data();
+        QByteArray bytes_1 = file_1_url.toLocal8Bit();//.toLatin1().data() 无效
+        QByteArray bytes_2 = file_2_url.toLocal8Bit();
+        QByteArray bytes_a = file_a_url.toLocal8Bit();
+        char *file_1_url_char = new char[1024];
+        char *file_2_url_char = new char[1024];
+        char *file_a_url_char = new char[1024];
+//        memcpy(file_1_url_char, bytes_1.data(), bytes_1.size()+1);  //存放结束符
+//        memcpy(file_2_url_char, bytes_2.data(), bytes_2.size()+1);
+//        memcpy(file_a_url_char, bytes_a.data(), bytes_a.size()+1);
+        strcpy(file_1_url_char ,bytes_1.data());
+        strcpy(file_2_url_char ,bytes_2.data());
+        strcpy(file_a_url_char ,bytes_a.data());
         m_pBrigde->set_x_a_info(file_1_g.toStdString(),
                                 file_1_t,
-                                _1_url,
+                                file_1_url_char,
                                 file_2_g.toStdString(),
                                 file_2_t,
-                                _2_url,
-                                _a_url);
-        vector<XModel> vec_x = m_pBrigde->compute_x_a();
-        //plot
-        QVector<double> m_x(vec_x.size()), m_y(vec_x.size());
-        for (size_t i = 0; i < vec_x.size(); i++)
-        {
-            m_x[i] = vec_x[i].x;
-            m_y[i] = vec_x[i].x;
-        }
-        m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
-        m_pQCumstomPlot->graph(0)->rescaleAxes();
-        m_pQCumstomPlot->replot();
+                                file_2_url_char,
+                                file_a_url_char);
     } catch (QException e) {
         qDebug("%s", e.what());
     }
@@ -222,7 +217,17 @@ void MainWindow::on_menu_file_q()
 
 void MainWindow::on_menu_build()
 {
-
+    vector<XModel> vec_x = m_pBrigde->compute_x_a();
+    //plot
+    QVector<double> m_x(vec_x.size()), m_y(vec_x.size());
+    for (size_t i = 0; i < vec_x.size(); i++)
+    {
+        m_x[i] = vec_x[i].x;
+        m_y[i] = vec_x[i].x;
+    }
+    m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
+    m_pQCumstomPlot->graph(0)->rescaleAxes();
+    m_pQCumstomPlot->replot();
 }
 
 MainWindow::~MainWindow()

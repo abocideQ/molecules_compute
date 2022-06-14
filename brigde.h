@@ -16,7 +16,7 @@ public:
     //compute Q
     long double compute_q();
 
-private:
+//private:
     //x
     string m_1_g;
     string m_2_g;
