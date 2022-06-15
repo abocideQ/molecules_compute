@@ -5,6 +5,7 @@
 #include "qclickqlabel.h"
 #include "qcustomplot.h"
 #include "brigde.h"
+#include "qcustominputdialog.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
