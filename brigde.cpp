@@ -1,6 +1,9 @@
 #include "brigde.h"
 
-void Brigde::set_x_a_info(string _g_1, float _Te1, string _pUrl_1, string _g_2, float _Te2, string _pUrl_2, string _pUrl_a)
+void Brigde::set_x_a_info(string _g_1, float _Te1, string _pUrl_1, string _g_2, float _Te2, string _pUrl_2,
+                          long double h, long double c, long double K,
+                          long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase,
+                          string _pUrl_a)
 {
     m_xaReq->g1 = _g_1;//名称
     m_xaReq->Te1 = _Te1;//差值
@@ -8,10 +11,21 @@ void Brigde::set_x_a_info(string _g_1, float _Te1, string _pUrl_1, string _g_2, 
     m_xaReq->g2 = _g_2;
     m_xaReq->Te2 = _Te2;
     m_xaReq->url2 = _pUrl_2;
+    m_xaReq->h = h;
+    m_xaReq->c = c;
+    m_xaReq->K = K;
+    m_xaReq->Tex = Tex;
+    m_xaReq->Tvib = Tvib;
+    m_xaReq->Trot = Trot;
+    m_xaReq->gne = gne;
+    m_xaReq->gno = gno;
+    m_xaReq->gbase = gbase;
     m_xaReq->urla = _pUrl_a;
 }
 
-void Brigde::add_q_info(string g, float Te, string _pUrl_q, long double h, long double c, long double K,  long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase)
+void Brigde::add_q_info(string g, float Te, string _pUrl_q,
+                        long double h, long double c, long double K,
+                        long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase)
 {
     QReq *qReq = new QReq();
     qReq->g = g;//名称
@@ -36,13 +50,22 @@ std::vector<XModel> Brigde::compute_x_a()
     return m_ret_vec_x;
 }
 
+std::vector<XModel> Brigde::compute_qevj()
+{
+    m_pComputeQevj->init(m_ret_vec_x, m_xaReq->h,  m_xaReq->c,  m_xaReq->K,
+                         m_xaReq->Tex, m_xaReq->Tvib, m_xaReq->Trot,
+                         m_xaReq->gne, m_xaReq->gno, m_xaReq->gbase);
+    m_ret_vec_x = m_pComputeQevj->computeQevj_s();
+    return m_ret_vec_x;
+}
+
 long double Brigde::compute_q()
 {
     m_ret_Q = 0;
     for(size_t i = 0; i < m_qReq->size(); i++){
         QReq *qReq = &m_qReq->at(i);
         m_pComputeQ->init(m_pParseX->ParseStr2VJ(qReq->g, qReq->Te, qReq->url),
-                          qReq->h, qReq->c, (qReq->K * qReq->Tex), (qReq->K * qReq->Tvib), (qReq->K * qReq->Trot), qReq->gne, qReq->gno, qReq->gbase);
+                          qReq->h, qReq->c, qReq->K, qReq->Tex, qReq->Tvib, qReq->Trot, qReq->gne, qReq->gno, qReq->gbase);
         m_ret_Q += m_pComputeQ->sumQ();
     }
     return m_ret_Q;

@@ -4,29 +4,37 @@
 #include "core/ParseX.h"
 #include "core/ParseA.h"
 #include "core/MergeXA.h"
+#include "core/ComputeQevj.h"
 #include "core/ComputeQ.h"
 
 class Brigde
 {
 public:
-    void set_x_a_info(string _g_1, float _t_1, string _pUrl_1, string _g_2, float _t_2, string _pUrl_2, string _pUrl_a);
-    void add_q_info(string _pUrl_q, float Te, string g, long double h, long double c, long double K, long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase);
-    //compute x & a
-    std::vector<XModel> compute_x_a();
+    void set_x_a_info(string _g_1, float _t_1, string _pUrl_1, string _g_2, float _t_2, string _pUrl_2,
+                      long double h, long double c, long double K,
+                      long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase,
+                      string _pUrl_a);
+    void add_q_info(string _pUrl_q, float Te, string g,
+                    long double h, long double c, long double K,
+                    long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase);
     //compute Q
     long double compute_q();
-
+    //compute x & a
+    std::vector<XModel> compute_x_a();
+    //compute Qevj
+    std::vector<XModel> compute_qevj();
 //private:
     //req
-    XAReq *m_xaReq = new XAReq();
     vector<QReq> *m_qReq = new vector<QReq>();
-    //ret
-    vector<XModel> m_ret_vec_x = vector<XModel>();
+    XAReq *m_xaReq = new XAReq();
+    //result
     long double m_ret_Q = 0;
+    vector<XModel> m_ret_vec_x = vector<XModel>();
     //utils
     ParseX *m_pParseX = new ParseX();
     ParseA *m_pParseA = new ParseA();
     MergeXA *m_pMergeXA = new MergeXA();
+    ComputeQevj *m_pComputeQevj = new ComputeQevj();
     ComputeQ *m_pComputeQ = new ComputeQ();
     //    //x
     //    string m_1_g;

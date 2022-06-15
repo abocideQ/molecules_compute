@@ -1,13 +1,16 @@
 #include "ComputeQ.h"
 
-void ComputeQ::init(vector<VJModel> vec_x, long double h, long double c, long double KTex, long double KTvib, long double KTrot, int gne, int gno, long double gbase)
+void ComputeQ::init(vector<VJModel> vec_x, long double h, long double c, long double K,
+                    long double Tex, long double Tvib, long double Trot,
+                    int gne, int gno, long double gbase)
 {
   m_vec_x = vec_x;
   const_h = h;
   const_c = c;
-  const_KTex = KTex;
-  const_KTvib = KTvib;
-  const_KTrot = KTrot;
+  const_K = K;
+  const_Tex = Tex;
+  const_Tvib = Tvib;
+  const_Trot = Trot;
   const_gne = gne;
   const_gno = gno;
   const_gbase = gbase;
@@ -39,7 +42,7 @@ long double ComputeQ::sumQ()
 long double ComputeQ::sumQe()
 {
   long double ret_Qe = 0;
-  long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_x[0].t) / (const_KTex))) * sumQv();
+  long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_x[0].t) / (const_K * const_Tex))) * sumQv();
   ret_Qe = DecimalUtils::sum_(ret_Qe, exp);
   std::cout << "Qe = " << ret_Qe << endl;
   return ret_Qe;
@@ -50,7 +53,7 @@ long double ComputeQ::sumQv()
   long double ret_Qv = 0;
   for (size_t i = 0; i < m_vec_Gv.size(); i++)
   {
-    long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_Gv[i].e) / (const_KTvib))) * sumQj(m_vec_Gv[i].v);
+    long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_Gv[i].e) / (const_K * const_Tvib))) * sumQj(m_vec_Gv[i].v);
     ret_Qv = DecimalUtils::sum_(ret_Qv, exp);
     std::cout << "*** exp(hcG(v)/ktvib) = " << ret_Qv << endl;
   }
@@ -72,7 +75,7 @@ long double ComputeQ::sumQj(float v)
     {
       vnj0 = m_vec_Fj[i].e;
     }
-    long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * (m_vec_Fj[i].e - vnj0)) / (const_KTrot)));
+    long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * (m_vec_Fj[i].e - vnj0)) / (const_K * const_Trot)));
     exp = sumgj(m_vec_Fj[i].j) * exp;
     ret_Qj = DecimalUtils::sum_(ret_Qj, exp);
     std::cout << "--- gjexp(hcF(j)/ktrot) = " << ret_Qj << endl;
