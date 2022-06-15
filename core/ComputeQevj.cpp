@@ -12,6 +12,6 @@ vector<XModel> ComputeQevj::computeQevj_s(vector<XModel> vec_x)
 long double ComputeQevj::computeQevj(XModel)
 {
     long double ret_ =0;
-
+    //G(v'')F(j'')
     return ret_;
 }

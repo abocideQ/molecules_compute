@@ -8,7 +8,7 @@
 class ParseA
 {
 public:
-  vector<AModel> AVector(char *pUrl);
+  vector<AModel> AVector(string pUrl);
 
 private:
   AModel ParseStr2A(char *line);
