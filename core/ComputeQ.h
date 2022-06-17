@@ -2,6 +2,7 @@
 #include <math.h>
 #include <iostream>
 #include <iomanip>
+#include <string>
 #include "XYModel.h"
 #include "DecimalUtils.h"
 #include "LongDouble.h"
@@ -11,7 +12,8 @@ class ComputeQ
 public:
   void init(vector<VJModel> vec_x, long double h, long double c, long double K, long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase);
   long double sumQ();
-
+  //
+  string record_string;
 private:
   vector<VJModel> m_vec_x;
   vector<VJModel> m_vec_Te;
