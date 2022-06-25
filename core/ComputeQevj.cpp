@@ -2,7 +2,7 @@
 
 void ComputeQevj::init(vector<XModel> vec_x, long double h, long double c, long double K,
                        long double Tex, long double Tvib, long double Trot,
-                       int gne, int gno, long double gbase)
+                       float gne, float gno, float gbase)
 {
     m_vec_x = vec_x;
     const_h = h;

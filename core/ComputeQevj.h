@@ -9,7 +9,7 @@
 class ComputeQevj
 {
 public:
-    void init(vector<XModel> vec_x, long double h, long double c, long double K, long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase);
+    void init(vector<XModel> vec_x, long double h, long double c, long double K, long double Tex, long double Tvib, long double Trot, float gne, float gno, float gbase);
     vector<XModel> computeQevj_s();
 
 private:
@@ -20,9 +20,9 @@ private:
     long double const_Tex = 0;
     long double const_Tvib = 0;
     long double const_Trot = 0;
-    long double const_gne = 0;
-    long double const_gno = 0;
-    long double const_gbase = 1;
+    float const_gne = 0;
+    float const_gno = 0;
+    float const_gbase = 1;
     long double computeQevj(XModel x_model, long double Gv);
     long double sumgj(float j);
 };

@@ -8,9 +8,9 @@
 class FileUtils
 {
 public:
-  std::vector<std::vector<float>> Load(const char *pFileUrl)
+  std::vector<std::vector<long double>> Load(const char *pFileUrl)
   {
-    std::vector<std::vector<float>> ret_;
+    std::vector<std::vector<long double>> ret_;
     std::ifstream ifs;
     ifs.open(pFileUrl);
     if (!ifs.is_open())
@@ -20,7 +20,7 @@ public:
     std::string str_buffer;
     while (getline(ifs, str_buffer))
     {
-      std::vector<float> tmp_vec_float = FloatObtain((char *)str_buffer.data());
+      std::vector<long double> tmp_vec_float = FloatObtain((char *)str_buffer.data());
       ret_.push_back(tmp_vec_float);
     }
     ifs.close();
@@ -48,9 +48,9 @@ public:
   }
 
 private:
-  std::vector<float> FloatObtain(char *content)
+  std::vector<long double> FloatObtain(char *content)
   {
-    std::vector<float> ret_;
+    std::vector<long double> ret_;
     std::string tmp_str = "";
     int i = 0;
     while (1)
@@ -63,7 +63,7 @@ private:
           if (!tmp_str.empty())
           {
             // std::cout << tmp_str << " ";
-            float tmp_float = std::stof(tmp_str);
+            long double tmp_float = std::stof(tmp_str);
             ret_.push_back(tmp_float);
             tmp_str = "";
           }
@@ -76,7 +76,7 @@ private:
         else if (!tmp_str.empty())
         {
           // std::cout << tmp_str << " ";
-          float tmp_float = std::stof(tmp_str);
+          long double tmp_float = std::stof(tmp_str);
           ret_.push_back(tmp_float);
           tmp_str = "";
         }

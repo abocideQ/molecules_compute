@@ -2,6 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <math.h>
+#include <sstream>
+#include <iomanip>
 #ifndef _BASEDECIMALUTILS_H_
 #define _BASEDECIMALUTILS_H_
 
@@ -37,6 +39,14 @@ public:
     {
       return false;
     }
+  }
+
+  //to_string 精度
+  static std::string to_string(long double data){
+      std::stringstream str_stream = std::stringstream();
+//      str_stream << std::setprecision(15) << data;
+      str_stream << data;
+      return str_stream.str();
   }
 };
 #endif

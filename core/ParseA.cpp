@@ -42,22 +42,22 @@ AModel ParseA::ParseStr2A(char *line)
           if (tmp_str.find("+") != string::npos)
           {
             // E
-            float tmp_float1 = std::stof(tmp_str.substr(0, tmp_str.find("E")));
+            long double tmp_float1 = std::stold(tmp_str.substr(0, tmp_str.find("E")));
             // +
-            float tmp_float2 = std::stof(tmp_str.substr(tmp_str.find("+")));
+            long double tmp_float2 = std::stold(tmp_str.substr(tmp_str.find("+")));
             // pow
-            float tmp_float3 = tmp_float1 * pow(10, tmp_float2);
+            long double tmp_float3 = tmp_float1 * pow(10, tmp_float2);
             // ret
             ret_.ret_ = tmp_float3;
           }
           else if (tmp_str.find("-") != string::npos)
           {
             // E
-            float tmp_float1 = std::stof(tmp_str.substr(0, tmp_str.find("E")));
+            long double tmp_float1 = std::stold(tmp_str.substr(0, tmp_str.find("E")));
             // -
-            float tmp_float2 = std::stof(tmp_str.substr(tmp_str.find("-")));
+            long double tmp_float2 = std::stold(tmp_str.substr(tmp_str.find("-")));
             // pow
-            float tmp_float3 = tmp_float1 * pow(10, tmp_float2);
+            long double tmp_float3 = tmp_float1 * pow(10, tmp_float2);
             // ret
             ret_.ret_ = tmp_float3;
           }
@@ -86,7 +86,7 @@ AModel ParseA::ParseStr2A(char *line)
           tmp_c = line[i];
           if (line[i] == ')')
           { // j1=j2-1, j1=j2, j1=j2+1 . j2=n , j2=n-1 , j2=n+1
-            float tmp_float = std::stof(tmp_str);
+            long double tmp_float = std::stold(tmp_str);
             tmp_float += diff;
             ret_.j2 = tmp_float;
             tmp_float += diff;
@@ -105,12 +105,12 @@ AModel ParseA::ParseStr2A(char *line)
       { // V1 v2
         if (index == 0)
         {
-          float tmp_float = std::stof(tmp_str);
+          long double tmp_float = std::stold(tmp_str);
           ret_.v1 = tmp_float;
         }
         else if (index == 1)
         {
-          float tmp_float = std::stof(tmp_str);
+          long double tmp_float = std::stold(tmp_str);
           ret_.v2 = tmp_float;
         }
         index++;
