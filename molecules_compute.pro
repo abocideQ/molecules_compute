@@ -25,6 +25,9 @@ SOURCES += \
     core/ParseA.cpp \
     core/MergeXA.cpp \
     core/ComputeQevj.cpp \
+    core/ComputeN.cpp \
+    core/ComputeFai.cpp \
+    core/ComputeY.cpp \
     core/ComputeQ.cpp \
 #    core/XYModel.cpp \
 #    core/FileUtils.cpp \
@@ -32,6 +35,7 @@ SOURCES += \
 #    core/DecimalUtils.cpp \
     core/LongDouble.cpp \
 #    gmp/gmp.cpp \
+
 
 HEADERS += \
     mainwindow.h \
@@ -42,6 +46,9 @@ HEADERS += \
     core/ParseA.h \
     core/MergeXA.h \
     core/ComputeQevj.h \
+    core/ComputeN.h \
+    core/ComputeFai.h \
+    core/ComputeY.h \
     core/ComputeQ.h \
     core/XYModel.h \
     core/FileUtils.h \
@@ -49,6 +56,7 @@ HEADERS += \
     core/DecimalUtils.h \
     core/LongDouble.h \
     gmp/gmp.h \
+
 
 FORMS += \
     mainwindow.ui \

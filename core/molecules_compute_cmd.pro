@@ -17,6 +17,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     ComputeFai.cpp \
+    ComputeY.cpp \
     main.cpp \
     ParseX.cpp \
     ParseA.cpp \
@@ -33,6 +34,7 @@ SOURCES += \
 
 HEADERS += \
     ComputeFai.h \
+    ComputeY.h \
     ParseX.h \
     ParseA.h \
     MergeXA.h \

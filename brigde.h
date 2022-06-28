@@ -6,58 +6,46 @@
 #include "core/MergeXA.h"
 #include "core/ComputeQevj.h"
 #include "core/ComputeQ.h"
+#include "core/ComputeN.h"
+#include "core/ComputeFai.h"
 
 class Brigde
 {
 public:
+    void add_q_info(string _pUrl_q, float Te, string g,
+                    long double h, long double c, long double K,
+                    long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase);
     void set_x_a_info(string _g_1, float _t_1, string _pUrl_1, string _g_2, float _t_2, string _pUrl_2,
                       long double h, long double c, long double K,
                       long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase,
                       string _pUrl_a);
-    void add_q_info(string _pUrl_q, float Te, string g,
-                    long double h, long double c, long double K,
-                    long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase);
-    //compute Q
+    //1. compute Q
     long double compute_q();
-    //compute x & a
+    //2. compute x & a
     std::vector<XModel> compute_x_a();
-    //compute Qevj
+    //3. compute Qevj
     std::vector<XModel> compute_qevj();
-//private:
-    //req
-    vector<QReq> *m_qReq = new vector<QReq>();
-    XAReq *m_xaReq = new XAReq();
-    //result
+    //4. compute n
+    long double compute_n();
+    //5. compute fai
+    std::vector<FaiModel> compute_fai();
+private:
+    //Req 请求
+    vector<QReq> *m_req_Q = new vector<QReq>();//Q
+    XAReq *m_req_x_a = new XAReq();//x_a_Qevj
+    //result 结果
     long double m_ret_Q = 0;
+    long double m_ret_n = 0;
     vector<XModel> m_ret_vec_x = vector<XModel>();
-    //utils
-    ParseX *m_pParseX = new ParseX();
-    ParseA *m_pParseA = new ParseA();
-    MergeXA *m_pMergeXA = new MergeXA();
-    ComputeQevj *m_pComputeQevj = new ComputeQevj();
-    ComputeQ *m_pComputeQ = new ComputeQ();
-    //    //x
-    //    string m_1_g;
-    //    string m_2_g;
-    //    float m_1_t;//差值
-    //    float m_2_t;//差值
-    //    string m_1_pUrl;
-    //    string m_2_pUrl;
-    //    //aul
-    //    string m_a_pUrl;
-    //    //q
-    //    string m_q_pUrl;
-    //    string m_q_g;
-    //    long double m_q_Te;//温度
-    //    long double m_q_h;//常量
-    //    long double m_q_c;//常量
-    //    long double m_q_K;//常量
-    //    long double m_q_Tex;//常量
-    //    long double m_q_Tvib;//常量
-    //    long double m_q_Trot;//常量
-    //    int m_q_gne;//常量
-    //    int m_q_gno;//常量
-    //    long double m_q_gbase;//常量
+    vector<FaiModel> m_ret_vec_fai = vector<FaiModel>();
+    //utils 工具
+    ParseX *m_pParseX = new ParseX();//x
+    ParseA *m_pParseA = new ParseA();//a
+    MergeXA *m_pMergeXA = new MergeXA();//x & a
+    ComputeQevj *m_pComputeQevj = new ComputeQevj();//Qevj
+    ComputeQ *m_pComputeQ = new ComputeQ();//Q
+    ComputeN *m_pComputeN = new ComputeN();//n
+    ComputeFai *m_pComputeFai = new ComputeFai();//fai 高斯分布
 };
 
 #endif // BRIGDE_H

@@ -329,7 +329,6 @@ void MainWindow::on_menu_build()
     m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
     m_pQCumstomPlot->graph(0)->rescaleAxes();
     m_pQCumstomPlot->replot();
-
 }
 
 MainWindow::~MainWindow()
