@@ -28,7 +28,7 @@ public:
     //4. compute n
     long double compute_n();
     //5. compute fai
-    std::vector<FaiModel> compute_fai();
+    std::vector<FaiModel> compute_fai(float u, float o, vector<long double> vec_x);
 private:
     //Req 请求
     vector<QReq> *m_req_Q = new vector<QReq>();//Q
@@ -37,7 +37,6 @@ private:
     long double m_ret_Q = 0;
     long double m_ret_n = 0;
     vector<XModel> m_ret_vec_x = vector<XModel>();
-    vector<FaiModel> m_ret_vec_fai = vector<FaiModel>();
     //utils 工具
     ParseX *m_pParseX = new ParseX();//x
     ParseA *m_pParseA = new ParseA();//a

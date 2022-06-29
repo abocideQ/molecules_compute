@@ -29,8 +29,9 @@ private:
     Ui::MainWindow *ui;
     //top
     QWidget *m_pWidget_top;
-    QClickQLabel *m_pLabel_file_x_a;
-    QClickQLabel *m_pLabel_file_q;
+    QClickQLabel *m_pLabel_file_Xul_Aul;
+    QClickQLabel *m_pLabel_file_Q;
+    QClickQLabel *m_pLabel_file_Gauss;
     QClickQLabel *m_pLabel_build;
     //center
     QWidget *m_pWidget_center;
@@ -39,19 +40,20 @@ private:
     QWidget *m_pWidget_bottom;
     QLabel *m_pLabel_data;
     //menu
-    QMenu *m_pMenu_file;
-    QAction *m_pAction_file_ground_state;
-    QAction *m_pAction_file_excitation_state;
-    QAction *m_pAction_file_a_ul;
-    QMenu *m_pMenu_build;
-    QAction *m_pAction_build;
+//    QMenu *m_pMenu_file;
+//    QAction *m_pAction_file_ground_state;
+//    QAction *m_pAction_file_excitation_state;
+//    QAction *m_pAction_file_a_ul;
+//    QMenu *m_pMenu_build;
+//    QAction *m_pAction_build;
     //core
     Brigde *m_pBrigde = new Brigde();
 
 private slots:
     void on_qcustomplot_selection();//qcustomplot selection
-    void on_menu_file_x_a();
-    void on_menu_file_q();
+    void on_menu_file_Xul_Aul();
+    void on_menu_file_Q();
+    void on_menu_Gauss();
     void on_menu_build();
 //    void on_menu_file_show();//qmenu show
 //    void on_menu_build_show();//qmenu show
