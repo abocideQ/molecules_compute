@@ -16,6 +16,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    core/ComputePlot.cpp \
     main.cpp \
     mainwindow.cpp \
     qclickqlabel.cpp \
@@ -29,11 +30,11 @@ SOURCES += \
     core/ComputeFai.cpp \
     core/ComputeY.cpp \
     core/ComputeQ.cpp \
+    core/LongDouble.cpp \
 #    core/XYModel.cpp \
 #    core/FileUtils.cpp \
 #    core/FileWriter.cpp \
 #    core/DecimalUtils.cpp \
-    core/LongDouble.cpp \
 #    gmp/gmp.cpp \
 
 
@@ -50,6 +51,7 @@ HEADERS += \
     core/ComputeFai.h \
     core/ComputeY.h \
     core/ComputeQ.h \
+    core/ComputePlot.h \
     core/XYModel.h \
     core/FileUtils.h \
     core/FileWriter.h \
