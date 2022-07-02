@@ -13,10 +13,14 @@ class ComputePlot
 {
 public:
     //设置区间
-    void computPlots(float min_x, float max_x, float step, long double Q, long double N, vector<XModel> vec_x);
+    void computPlots(float min_x, float max_x, float step, vector<XModel> vec_x);
 private:
     vector<XModel> computeBasic(float min_x, float max_x, vector<XModel> vec_x);
-    vector<XModel> computeSinglePlot(vector<XModel> vec_x_basic);
+    vector<PlotModel> computeSinglePlot(vector<long double> vec_plot_x, XModel x_basic);
+    //高斯分布数据  1.μ=0 期望值/分布平均值/中心点, 2.σ=0.25 标准差/展宽
+    std::vector<FaiModel> compute_fai_gauss(XModel x_basic, vector<long double> vec_plot_x);
+    //Trot + 分子量
+    std::vector<FaiModel> compute_fai(float Trot, float weight, XModel x_model, vector<long double> vec_plot_x);
 };
 
 #endif // COMPUTEPLOT_H
