@@ -236,6 +236,7 @@ void MainWindow::on_menu_file_Xul_Aul()
                                 const_Tssss, const_Tssss,const_Tssss,
                                 const_gne, const_gno, const_gbase,
                                 file_a_url_char);
+       vector<XModel> vec_x =  m_pBrigde->compute_x_a();
     } catch (QException e) {
         qDebug("%s", e.what());
     }
@@ -330,7 +331,9 @@ void MainWindow::on_menu_Gauss()
     vec_x->push_back(1);
     vec_x->push_back(1.5);
     vec_x->push_back(2);
-    vector<FaiModel>vec_fai = m_pBrigde->compute_fai(0, 1, *vec_x);
+    XModel x_model = XModel();
+    x_model.x = 0.3;//中心点
+    vector<FaiModel>vec_fai = m_pBrigde->compute_fai(1500, 1, x_model, *vec_x);
     //plot
     QVector<double> m_x(vec_fai.size()), m_y(vec_fai.size());
     for (size_t i = 0; i < vec_fai.size(); i++)

@@ -82,7 +82,7 @@ long double Brigde::compute_n()
     return m_ret_n;
 }
 
-std::vector<FaiModel> Brigde::compute_fai(float u, float o, vector<long double> vec_x)
+std::vector<FaiModel> Brigde::compute_fai(float Trot, float weight, XModel x_model, vector<long double> vec_x)
 {
-    return m_pComputeFai->compute_fai_gauss(u, o, vec_x);
+    return m_pComputePlot->compute_fai(Trot, weight, x_model, vec_x);
 }

@@ -5,7 +5,7 @@
 #include <string>
 #include "XYModel.h"
 #include "DecimalUtils.h"
-#include "LongDouble.h"
+//#include "LongDouble.h"
 
 class ComputeQ
 {

@@ -7,7 +7,8 @@
 #include "core/ComputeQevj.h"
 #include "core/ComputeQ.h"
 #include "core/ComputeN.h"
-#include "core/ComputeFai.h"
+#include "core/ComputePlot.h"
+//#include "core/ComputeFai.h"
 
 class Brigde
 {
@@ -28,7 +29,7 @@ public:
     //4. compute n
     long double compute_n();
     //5. compute fai
-    std::vector<FaiModel> compute_fai(float u, float o, vector<long double> vec_x);
+    std::vector<FaiModel> compute_fai(float Trot, float o, XModel x_model, vector<long double> vec_x);
 private:
     //Req 请求
     vector<QReq> *m_req_Q = new vector<QReq>();//Q
@@ -44,7 +45,7 @@ private:
     ComputeQevj *m_pComputeQevj = new ComputeQevj();//Qevj
     ComputeQ *m_pComputeQ = new ComputeQ();//Q
     ComputeN *m_pComputeN = new ComputeN();//n
-    ComputeFai *m_pComputeFai = new ComputeFai();//fai 高斯分布
+    ComputePlot *m_pComputePlot = new ComputePlot();//fai 高斯分布
 };
 
 #endif // BRIGDE_H
