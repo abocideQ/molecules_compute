@@ -11,15 +11,20 @@
 class ComputePlot
 {
 public:
-    //设置区间
-    void computPlots(float min_x, float max_x, float step, vector<XModel> vec_x);
-//private:
+    std::vector<CoordinateModel> computPlots(float min_x, float max_x, float step, float weight, float Trot, vector<XModel> vec_x);
+
+    std::vector<CoordinateModel> computPlotsTest(float weight, float Trot);
+private:
     vector<XModel> computeBasic(float min_x, float max_x, vector<XModel> vec_x);
-    vector<PlotModel> computeSinglePlot(vector<long double> vec_plot_x, XModel x_basic);
-    //高斯分布数据  1.μ=0 期望值/分布平均值/中心点, 2.σ=0.25 标准差/展宽
-    std::vector<FaiModel> compute_fai_gauss(XModel x_basic, vector<long double> vec_plot_x);
-    //Trot + 分子量
-    std::vector<FaiModel> compute_fai(float Trot, float weight, XModel x_model, vector<long double> vec_plot_x);
+    //=========method 0
+    CoordinateModel computeCoordinate(long double fWidth_L, long double fWidth_V, XModel x_basic, long double x);
+//    =========method 1
+//    vector<CoordinateModel> computePlot(float Trot, float weight, vector<XModel> vec_x_basic, vector<long double> vec_plot_x);
+//    //Trot:15000 weight:分子量
+//    std::vector<CoordinateModel> computeCoordinate(float Trot, float weight, XModel x_basic, vector<long double> vec_plot_x);
+//    //=========method 2
+//    //高斯分布数据  1.μ=0 期望值/分布平均值/中心点, 2.σ=0.25 标准差/展宽
+//    std::vector<CoordinateModel> compute_fai_gauss(XModel x_basic, vector<long double> vec_plot_x);
 };
 
 #endif // COMPUTEPLOT_H

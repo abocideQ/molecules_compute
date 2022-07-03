@@ -46,6 +46,34 @@ void Brigde::set_x_a_info(string _g_1, float _Te1, string _pUrl_1, string _g_2, 
     m_req_x_a->urla = _pUrl_a;//Aul
 }
 
+std::vector<CoordinateModel> Brigde::compute(float min_x, float max_x, float step, float weight)
+{
+    compute_q();
+    compute_x_a();
+    compute_qevj();
+    compute_n();
+    compute_y();
+    compute_plot(min_x, max_x, step, weight);
+    //free
+    free(m_pParseX);
+    free(m_pParseA);
+    free(m_pMergeXA);
+    free(m_pComputeQevj);
+    free(m_pComputeQ);
+    free(m_pComputeN);
+    free(m_pComputeY);
+    free(m_pComputePlot);
+    m_pParseX = new ParseX();//x
+    m_pParseA = new ParseA();//a
+    m_pMergeXA = new MergeXA();//x & a
+    m_pComputeQevj = new ComputeQevj();//Qevj
+    m_pComputeQ = new ComputeQ();//Q
+    m_pComputeN = new ComputeN();//n
+    m_pComputeY = new ComputeY();//y
+    m_pComputePlot = new ComputePlot();//fai
+    return m_ret_vec_plot;
+}
+
 long double Brigde::compute_q()
 {
     m_ret_Q = 0;
@@ -60,29 +88,37 @@ long double Brigde::compute_q()
 
 std::vector<XModel> Brigde::compute_x_a()
 {
-    m_ret_vec_x = m_pMergeXA->Merge(m_pParseX->XVector(m_req_x_a->g1, m_req_x_a->Te1, m_req_x_a->url1, m_req_x_a->g2, m_req_x_a->Te2, m_req_x_a->url2, m_req_x_a->h, m_req_x_a->c),
+    m_ret_vec_xModel = m_pMergeXA->Merge(m_pParseX->XVector(m_req_x_a->g1, m_req_x_a->Te1, m_req_x_a->url1, m_req_x_a->g2, m_req_x_a->Te2, m_req_x_a->url2, m_req_x_a->h, m_req_x_a->c),
                                     m_pParseA->AVector(m_req_x_a->urla));
-    return m_ret_vec_x;
+    return m_ret_vec_xModel;
 }
 
 std::vector<XModel> Brigde::compute_qevj()
 {
-    m_pComputeQevj->init(m_ret_vec_x, m_req_x_a->h,  m_req_x_a->c,  m_req_x_a->K,
+    m_pComputeQevj->init(m_ret_vec_xModel, m_req_x_a->h,  m_req_x_a->c,  m_req_x_a->K,
                          m_req_x_a->Tex, m_req_x_a->Tvib, m_req_x_a->Trot,
                          m_req_x_a->gne, m_req_x_a->gno, m_req_x_a->gbase);
-    m_ret_vec_x = m_pComputeQevj->computeQevj_s();
-    return m_ret_vec_x;
+    m_ret_vec_xModel = m_pComputeQevj->computeQevj_s();
+    return m_ret_vec_xModel;
 }
 
 long double Brigde::compute_n()
 {
     //R=8.31 P=1.01*10^5 T=15000
-    m_pComputeN->init(8.31, 1.01 * pow(10, 5), 15000);
+    m_pComputeN->init(8.31, 1.01 * pow(10, 5), m_req_x_a->Trot);
     m_ret_n = m_pComputeN->compute_n();
     return m_ret_n;
 }
 
-std::vector<FaiModel> Brigde::compute_fai(float Trot, float weight, XModel x_model, vector<long double> vec_x)
+std::vector<XModel> Brigde::compute_y()
 {
-    return m_pComputePlot->compute_fai(Trot, weight, x_model, vec_x);
+//    m_pComputeY->init(m_req_x_a->h, m_req_x_a->c, m_ret_n, m_ret_Q, m_ret_vec_xModel);
+    m_ret_vec_xModel = m_pComputeY->compute_y(m_req_x_a->h, m_req_x_a->c, m_ret_n, m_ret_Q, m_ret_vec_xModel);
+    return m_ret_vec_xModel;
+}
+
+std::vector<CoordinateModel> Brigde::compute_plot(float min_x, float max_x, float step, float weight)
+{
+    m_ret_vec_plot = m_pComputePlot->computPlots(min_x, max_x, step, weight, m_req_x_a->Trot, m_ret_vec_xModel);
+    return m_ret_vec_plot;
 }

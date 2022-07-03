@@ -35,8 +35,9 @@ long double ComputeQ::sumQ()
     m_vec_Fj.push_back(m_vec_x[i]);
   }
   long double Q = sumQe();
-  std::cout << "Q = " << Q << endl;
-  record_string += "Q = " + DecimalUtils::to_string(Q) + " \n";
+  m_vec_Te.clear();
+  m_vec_Gv.clear();
+  m_vec_Fj.clear();
   return Q;
 }
 
@@ -45,7 +46,6 @@ long double ComputeQ::sumQe()
   long double ret_Qe = 0;
   long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_x[0].t) / (const_K * const_Tex))) * sumQv();
   ret_Qe = DecimalUtils::sum_(ret_Qe, exp);
-  std::cout << "Qe = " << ret_Qe << endl;
   return ret_Qe;
 }
 
@@ -56,10 +56,7 @@ long double ComputeQ::sumQv()
   {
     long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_Gv[i].e) / (const_K * const_Tvib))) * sumQj(m_vec_Gv[i].v);
     ret_Qv = DecimalUtils::sum_(ret_Qv, exp);
-    std::cout << "*** exp(hcG(v)/ktvib) = " << ret_Qv << endl;
-    record_string += "*** exp(hcG(v)/ktvib) = " + DecimalUtils::to_string(ret_Qv) + " \n";
   }
-//  std::cout << "sumQv = " << ret_Qv << endl;
   return ret_Qv;
 }
 
@@ -80,8 +77,6 @@ long double ComputeQ::sumQj(float v)
     long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * (m_vec_Fj[i].e - vnj0)) / (const_K * const_Trot)));
     exp = sumgj(m_vec_Fj[i].j) * exp;
     ret_Qj = DecimalUtils::sum_(ret_Qj, exp);
-    std::cout << "--- gjexp(hcF(j)/ktrot) = " << ret_Qj << endl;
-    record_string += "--- gjexp(hcF(j)/ktrot) = " + DecimalUtils::to_string(ret_Qj) + " \n";
   }
   return ret_Qj;
 }

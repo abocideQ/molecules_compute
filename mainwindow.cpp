@@ -32,31 +32,25 @@ void MainWindow::initWidgetTop(){
     //    layout_top->setSizeConstraint(QLayout::SetMaximumSize);
     //    layout_top->setMargin(10);
     //    layout_top->setSpacing(0);
-    m_pLabel_file_Xul_Aul = new QClickQLabel("λul & Aul");
-    m_pLabel_file_Xul_Aul->setMinimumWidth(60);
-    m_pLabel_file_Xul_Aul->setMaximumHeight(36);
-    m_pLabel_file_Xul_Aul->setAlignment(Qt::AlignmentFlag::AlignCenter);
     m_pLabel_file_Q = new QClickQLabel("Q");
     m_pLabel_file_Q->setMinimumWidth(60);
     m_pLabel_file_Q->setMaximumHeight(36);
     m_pLabel_file_Q->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    m_pLabel_file_Gauss = new QClickQLabel("Gauss");
-    m_pLabel_file_Gauss->setMinimumWidth(60);
-    m_pLabel_file_Gauss->setMaximumHeight(36);
-    m_pLabel_file_Gauss->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    m_pLabel_file_Xul_Aul = new QClickQLabel("λul & Aul");
+    m_pLabel_file_Xul_Aul->setMinimumWidth(60);
+    m_pLabel_file_Xul_Aul->setMaximumHeight(36);
+    m_pLabel_file_Xul_Aul->setAlignment(Qt::AlignmentFlag::AlignCenter);
     m_pLabel_build = new QClickQLabel("Build");
     m_pLabel_build->setMinimumWidth(60);
     m_pLabel_build->setMaximumHeight(36);
     m_pLabel_build->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    layout_top->addWidget(m_pLabel_file_Xul_Aul);
     layout_top->addWidget(m_pLabel_file_Q);
-    layout_top->addWidget(m_pLabel_file_Gauss);
+    layout_top->addWidget(m_pLabel_file_Xul_Aul);
     layout_top->addWidget(m_pLabel_build);
     layout_top->addSpacerItem(new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Fixed));
     //信号槽
-    connect(m_pLabel_file_Xul_Aul, &QClickQLabel::clicked, this, &MainWindow::on_menu_file_Xul_Aul);
     connect(m_pLabel_file_Q, &QClickQLabel::clicked, this, &MainWindow::on_menu_file_Q);
-    connect(m_pLabel_file_Gauss, &QClickQLabel::clicked, this, &MainWindow::on_menu_Gauss);
+    connect(m_pLabel_file_Xul_Aul, &QClickQLabel::clicked, this, &MainWindow::on_menu_file_Xul_Aul);
     connect(m_pLabel_build, &QClickQLabel::clicked, this, &MainWindow::on_menu_build);
 }
 
@@ -71,7 +65,7 @@ void MainWindow::initWidgetCenter(){
     //    m_pQCumstomPlot->setMultiSelectModifier(Qt::KeyboardModifier::ControlModifier);
     //    m_pQCumstomPlot->setSelectionRectMode(QCP::SelectionRectMode::srmSelect);
     // 数据点显示图案
-    m_pQCumstomPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ScatterShape::ssDisc, 5));
+    m_pQCumstomPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ScatterShape::ssDisc, 3));
     m_pQCumstomPlot->graph(0)->setSelectable(QCP::SelectionType::stMultipleDataRanges);
     // 设置颜色/宽度等
     QPen *pen = new QPen;
@@ -134,34 +128,94 @@ void MainWindow::on_qcustomplot_selection()
     }
 }
 
+void MainWindow::on_menu_file_Q()
+{
+    try {
+        while(1){
+            bool ret_ok;
+            //A态
+            QString file_q_g = QInputDialog::getText(this, tr("?态名称"),tr("请输入?态的名称"), QLineEdit::Normal, 0, &ret_ok);
+            if (!ret_ok || file_q_g.isEmpty()){
+                goto __Exit;
+            }
+            float file_q_Te = QInputDialog::getText(this, tr("?态跃迁值"),tr("请输入?态的跃迁值Te（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || file_q_Te < 0){
+                return;
+            }
+            QString file_q_url = QFileDialog::getOpenFileName(this, "请选择?态文件", "", "All files(*.*)");
+            if (file_q_url.isEmpty()){
+                goto __Exit;
+            }
+            //常量h
+            long double const_h = 6.63 * pow(10, -34);
+            //常量c
+            long double const_c = 2.99792458 * pow(10, 10);
+            //常量K
+            long double const_K = (1.38 * pow(10, -23));
+            //Tex Tvib Trot
+            float const_Tssss = QInputDialog::getText(this, tr("温度"),tr("请输入温度（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || const_Tssss < 0){
+                goto __Exit;
+            }
+            //gne
+            float const_gne = QInputDialog::getText(this, tr("偶数时的值"),tr("请输入偶数时的值(gne)"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || const_gne < 0){
+                goto __Exit;
+            }
+            //gno
+            float const_gno = QInputDialog::getText(this, tr("奇数时的值"),tr("请输入奇数时的值(gno)"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || const_gno < 0){
+                goto __Exit;
+            }
+            //gbase
+            float const_gbase = QInputDialog::getText(this, tr("gj倍数"),tr("请输入gj倍数"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+            if (!ret_ok || const_gbase < 0){
+                goto __Exit;
+            }
+            //======================save
+            QByteArray bytes = file_q_url.toLocal8Bit();//.toLatin1().data() 无效
+            char *file_url_char = new char[1024];
+            //        memcpy(file_url_char, bytes.data(), bytes.size()+1);  //存放结束符
+            strcpy(file_url_char ,bytes.data());
+            m_pBrigde->add_q_info(file_q_g.toStdString(), file_q_Te, file_url_char,
+                                  const_h, const_c, const_K, const_Tssss, const_Tssss,const_Tssss,
+                                  const_gne, const_gno, const_gbase);
+        }
+__Exit:
+        qDebug()<< "done";
+    } catch (QException e) {
+        qDebug("%s", e.what());
+    }
+}
+
 void MainWindow::on_menu_file_Xul_Aul()
 {
     try {
         bool ret_ok;
         //A态
-        QString file_1_g = QInputDialog::getText(this, tr("A态名称"),tr("请输入A态的名称"), QLineEdit::Normal, 0, &ret_ok);
+        QString file_1_g = QInputDialog::getText(this, tr("低态名称"),tr("请输入低态的名称"), QLineEdit::Normal, 0, &ret_ok);
         if (!ret_ok || file_1_g.isEmpty()){
             return;
         }
-        float file_1_t = QInputDialog::getText(this, tr("A态跃迁值"),tr("请输入A态的跃迁值Te（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+        float file_1_t = QInputDialog::getText(this, tr("低态跃迁值"),tr("请输入低态的跃迁值Te（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
         if (!ret_ok || file_1_t < 0){
             return;
         }
-        QString file_1_url = QFileDialog::getOpenFileName(this, "请选择A态文件", "", "All files(*.*)");
+        QString file_1_url = QFileDialog::getOpenFileName(this, "请选择低态文件", "", "All files(*.*)");
         if (file_1_url.isEmpty()){
             return;
         }
         qDebug()<< file_1_url;
         //B态
-        QString file_2_g = QInputDialog::getText(this, tr("B态名称"),tr("请输入B态的名称"), QLineEdit::Normal,0, &ret_ok);
+        QString file_2_g = QInputDialog::getText(this, tr("高态名称"),tr("请输入高态的名称"), QLineEdit::Normal,0, &ret_ok);
         if (!ret_ok || file_2_g.isEmpty()){
             return;
         }
-        float file_2_t = QInputDialog::getText(this, tr("B态跃迁值"),tr("请输入B态的跃迁值T（请输入数字）"), QLineEdit::Normal,0, &ret_ok).toFloat();
+        float file_2_t = QInputDialog::getText(this, tr("高态跃迁值"),tr("请输入高态的跃迁值T（请输入数字）"), QLineEdit::Normal,0, &ret_ok).toFloat();
         if (!ret_ok || file_2_t < 0){
             return;
         }
-        QString file_2_url = QFileDialog::getOpenFileName(this, "请选择B态文件", "", "All files(*.*)");
+        QString file_2_url = QFileDialog::getOpenFileName(this, "请选择高态文件", "", "All files(*.*)");
         if (file_2_url.isEmpty()){
             return;
         }
@@ -172,29 +226,13 @@ void MainWindow::on_menu_file_Xul_Aul()
             return;
         }
         //常量h
-        long double const_h = 0;
-        string const_h_str = QInputDialog::getText(this, tr("常量h"),tr("请输入常量h(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
-        if (!ret_ok || const_h_str.empty()){
-            return;
-        }
-        const_h = ENumber(const_h_str);
-        //        qDebug()<< "h: " << QString::number(const_h, 2, 50);
+        long double const_h = 6.63 * pow(10, -34);
         //常量c
-        long double const_c = 0;
-        string const_c_str = QInputDialog::getText(this, tr("常量c"),tr("请输入常量c(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
-        if (!ret_ok || const_c_str.empty()){
-            return;
-        }
-        const_c = ENumber(const_c_str);
+        long double const_c = 2.99792458 * pow(10, 10);
         //常量K
-        long double const_K = 0;
-        string const_K_str = QInputDialog::getText(this, tr("常量K"),tr("请输入常量K(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
-        if (!ret_ok || const_K_str.empty()){
-            return;
-        }
-        const_K = ENumber(const_K_str);
+        long double const_K = (1.38 * pow(10, -23));
         //Tex Tvib Trot
-        float const_Tssss = QInputDialog::getText(this, tr("温度"),tr("请输入温度（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+        float const_Tssss = QInputDialog::getText(this, tr("温度"),tr("请输入温度Tex Tvib Trot（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
         if (!ret_ok || const_Tssss < 0){
             return;
         }
@@ -236,129 +274,32 @@ void MainWindow::on_menu_file_Xul_Aul()
                                 const_Tssss, const_Tssss,const_Tssss,
                                 const_gne, const_gno, const_gbase,
                                 file_a_url_char);
-       vector<XModel> vec_x =  m_pBrigde->compute_x_a();
+        //       vector<XModel> vec_x =  m_pBrigde->compute_x_a();
     } catch (QException e) {
         qDebug("%s", e.what());
     }
-}
-
-void MainWindow::on_menu_file_Q()
-{
-    try {
-        while(1){
-            bool ret_ok;
-            //A态
-            QString file_q_g = QInputDialog::getText(this, tr("X态名称"),tr("请输入X态的名称"), QLineEdit::Normal, 0, &ret_ok);
-            if (!ret_ok || file_q_g.isEmpty()){
-                goto __Exit;
-            }
-            float file_q_Te = QInputDialog::getText(this, tr("X态跃迁值"),tr("请输入X态的跃迁值Te（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
-            if (!ret_ok || file_q_Te < 0){
-                return;
-            }
-            QString file_q_url = QFileDialog::getOpenFileName(this, "请选择A态文件", "", "All files(*.*)");
-            if (file_q_url.isEmpty()){
-                goto __Exit;
-            }
-            //常量h
-            long double const_h = 0;
-            string const_h_str = QInputDialog::getText(this, tr("常量h"),tr("请输入常量h(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
-            if (!ret_ok || const_h_str.empty()){
-                goto __Exit;
-            }
-            const_h = ENumber(const_h_str);
-            //            qDebug()<< "h: " << QString::number(const_h, 2, 50);
-            //常量c
-            long double const_c = 0;
-            string const_c_str = QInputDialog::getText(this, tr("常量c"),tr("请输入常量c(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
-            if (!ret_ok || const_c_str.empty()){
-                goto __Exit;
-            }
-            const_c = ENumber(const_c_str);
-            //常量K
-            long double const_K = 0;
-            string const_K_str = QInputDialog::getText(this, tr("常量K"),tr("请输入常量K(例 11或1.1E±1)"), QLineEdit::Normal, 0, &ret_ok).toStdString();
-            if (!ret_ok || const_K_str.empty()){
-                goto __Exit;
-            }
-            const_K = ENumber(const_K_str);
-            //Tex Tvib Trot
-            float const_Tssss = QInputDialog::getText(this, tr("温度"),tr("请输入温度（请输入数字）"), QLineEdit::Normal, 0, &ret_ok).toFloat();
-            if (!ret_ok || const_Tssss < 0){
-                goto __Exit;
-            }
-            //gne
-            float const_gne = QInputDialog::getText(this, tr("偶数时的值"),tr("请输入偶数时的值(gne)"), QLineEdit::Normal, 0, &ret_ok).toFloat();
-            if (!ret_ok || const_gne < 0){
-                goto __Exit;
-            }
-            //gno
-            float const_gno = QInputDialog::getText(this, tr("奇数时的值"),tr("请输入奇数时的值(gno)"), QLineEdit::Normal, 0, &ret_ok).toFloat();
-            if (!ret_ok || const_gno < 0){
-                goto __Exit;
-            }
-            //gbase
-            float const_gbase = QInputDialog::getText(this, tr("gj倍数"),tr("请输入gj倍数"), QLineEdit::Normal, 0, &ret_ok).toFloat();
-            if (!ret_ok || const_gbase < 0){
-                goto __Exit;
-            }
-            //======================save
-            QByteArray bytes = file_q_url.toLocal8Bit();//.toLatin1().data() 无效
-            char *file_url_char = new char[1024];
-            //        memcpy(file_url_char, bytes.data(), bytes.size()+1);  //存放结束符
-            strcpy(file_url_char ,bytes.data());
-            m_pBrigde->add_q_info(file_q_g.toStdString(), file_q_Te, file_url_char,
-                                  const_h, const_c, const_K, const_Tssss, const_Tssss,const_Tssss,
-                                  const_gne, const_gno, const_gbase);
-            qDebug()<< "c: " << QString::number(const_c, 10, 50);
-        }
-__Exit:
-        qDebug()<< "done";
-    } catch (QException e) {
-        qDebug("%s", e.what());
-    }
-}
-
-void MainWindow::on_menu_Gauss()
-{
-    vector<long double> *vec_x = new vector<long double>();
-    vec_x->push_back(-2);
-    vec_x->push_back(-1.5);
-    vec_x->push_back(-1);
-    vec_x->push_back(-0.5);
-    vec_x->push_back(0);
-    vec_x->push_back(0.5);
-    vec_x->push_back(1);
-    vec_x->push_back(1.5);
-    vec_x->push_back(2);
-    XModel x_model = XModel();
-    x_model.x = 0.3;//中心点
-    vector<FaiModel>vec_fai = m_pBrigde->compute_fai(1500, 1, x_model, *vec_x);
-    //plot
-    QVector<double> m_x(vec_fai.size()), m_y(vec_fai.size());
-    for (size_t i = 0; i < vec_fai.size(); i++)
-    {
-        m_x[i] = vec_fai[i].x;
-        m_y[i] = vec_fai[i].y;
-    }
-    m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
-    m_pQCumstomPlot->graph(0)->rescaleAxes();
-    m_pQCumstomPlot->replot();
 }
 
 void MainWindow::on_menu_build()
 {
-    //Q
-    long double Q = m_pBrigde->compute_q();
-    //x & a
-    vector<XModel> vec_x = m_pBrigde->compute_x_a();
-    vec_x = m_pBrigde->compute_qevj();
-    //plot
-    QVector<double> m_x(vec_x.size()), m_y(vec_x.size());
-    for (size_t i = 0; i < vec_x.size(); i++)
+//    bool ret_ok;
+//    float min = QInputDialog::getText(this, tr("min"),tr("min"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+//    if (!ret_ok || min < 0){
+//        return;
+//    }
+//    float max = QInputDialog::getText(this, tr("max"),tr("max"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+//    if (!ret_ok || max < 0){
+//        return;
+//    }
+//    vector<CoordinateModel> vec_coordinate = m_pBrigde->compute(min, max, 0.02, 1);
+    //曲线测试
+    vector<CoordinateModel> vec_coordinate = ComputePlot().computPlotsTest(14.0f, 15000);
+    //=====
+    QVector<double> m_x(vec_coordinate.size()), m_y(vec_coordinate.size());
+    for (size_t i = 0; i < vec_coordinate.size(); i++)
     {
-        m_x[i] = vec_x[i].x;
-        m_y[i] = vec_x[i].x;
+        m_x[i] = vec_coordinate[i].x;
+        m_y[i] = vec_coordinate[i].y;
     }
     m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
     m_pQCumstomPlot->graph(0)->rescaleAxes();

@@ -28,7 +28,6 @@ SOURCES += \
     core/ComputeN.cpp \
     core/ComputeY.cpp \
     core/ComputeQ.cpp \
-    core/ComputeFai.cpp \
     core/ComputePlot.cpp \
 #    core/LongDouble.cpp \
 #    core/XYModel.cpp \
@@ -50,7 +49,6 @@ HEADERS += \
     core/ComputeN.h \
     core/ComputeY.h \
     core/ComputeQ.h \
-    core/ComputeFai.h \
     core/ComputePlot.h \
     core/XYModel.h \
     core/FileUtils.h \

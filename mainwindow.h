@@ -53,7 +53,6 @@ private slots:
     void on_qcustomplot_selection();//qcustomplot selection
     void on_menu_file_Xul_Aul();
     void on_menu_file_Q();
-    void on_menu_Gauss();
     void on_menu_build();
 //    void on_menu_file_show();//qmenu show
 //    void on_menu_build_show();//qmenu show

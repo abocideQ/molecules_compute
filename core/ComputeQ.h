@@ -12,8 +12,6 @@ class ComputeQ
 public:
   void init(vector<VJModel> vec_x, long double h, long double c, long double K, long double Tex, long double Tvib, long double Trot, float gne, float gno, float gbase);
   long double sumQ();
-  //
-  string record_string;
 private:
   vector<VJModel> m_vec_x;
   vector<VJModel> m_vec_Te;

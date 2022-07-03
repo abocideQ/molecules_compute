@@ -1,7 +1,7 @@
 #ifndef XYMODEL
 #define XYMODEL
-
 #include <string>
+#include <vector>
 
 using namespace std;
 
@@ -45,19 +45,12 @@ typedef struct _XModel//基准 x, y
     long double y;
 } XModel;
 
-typedef struct _FaiModel//曲线数据 高斯分布 等得出
-{
-    long double x;
-    long double y;
-} FaiModel;
-
-
-typedef struct _PlotModel//最终数据 由 曲线数据 & XModel 得出
+typedef struct _CoordinateModel
 {
     XModel xModel;
-    long double x;
-    long double y;
-} PlotModel;
+    long double x = 0;
+    long double y = 0;
+} CoordinateModel;
 
 typedef struct _XReq
 {

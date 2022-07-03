@@ -25,21 +25,6 @@ vector<XModel> ComputeQevj::computeQevj_s()
             Gv = x_model->e2;
         }
         x_model->Qevj = computeQevj(*x_model, Gv);
-//        std::cout << "g'=" << x_model->g1 << " "
-//                  << "v'=" << x_model->v1 << " "
-//                  << "j'=" << x_model->j1 << " "
-//                  << "e'=" << x_model->e1 << " "
-//                  << "t'=" << x_model->t1 << " "
-//                  << " --- "
-//                  << "g''=" << x_model->g2 << " "
-//                  << "v''=" << x_model->v2 << " "
-//                  << "j''=" << x_model->j2 << " "
-//                  << "e''=" << x_model->e2 << " "
-//                  << "t''=" << x_model->t2 << " "
-//                  << " --- "
-//                  << "x= " << x_model->x << " "
-//                  << "a= " << x_model->a << " "
-//                  << "Qvej= " << x_model->Qevj << " "<< std::endl;
     }
     return m_vec_x;
 }

@@ -54,7 +54,7 @@ vector<XModel> ParseX::XVector(string g1, float t1,string pUrl1, string g2, floa
             x_model.t2 = vj2.t;
             // x
             x_model.x = x_model.e2 - x_model.e1 + (x_model.t2 - x_model.t1);
-            x_model.x = (h * c) / x_model.x;
+//            x_model.x = (h * c) / x_model.x;
             ret_.push_back(x_model);
         }
     }

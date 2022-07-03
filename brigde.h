@@ -7,8 +7,8 @@
 #include "core/ComputeQevj.h"
 #include "core/ComputeQ.h"
 #include "core/ComputeN.h"
+#include "core/ComputeY.h"
 #include "core/ComputePlot.h"
-//#include "core/ComputeFai.h"
 
 class Brigde
 {
@@ -20,6 +20,8 @@ public:
                       long double h, long double c, long double K,
                       long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase,
                       string _pUrl_a);
+    std::vector<CoordinateModel> compute(float min_x, float max_x, float step, float weight);
+protected:
     //1. compute Q
     long double compute_q();
     //2. compute x & a
@@ -28,8 +30,10 @@ public:
     std::vector<XModel> compute_qevj();
     //4. compute n
     long double compute_n();
-    //5. compute fai
-    std::vector<FaiModel> compute_fai(float Trot, float o, XModel x_model, vector<long double> vec_x);
+    //5. compute y
+    std::vector<XModel> compute_y();
+    //6. compute plot
+    std::vector<CoordinateModel> compute_plot(float min_x, float max_x, float step, float weight);
 private:
     //Req 请求
     vector<QReq> *m_req_Q = new vector<QReq>();//Q
@@ -37,7 +41,8 @@ private:
     //result 结果
     long double m_ret_Q = 0;
     long double m_ret_n = 0;
-    vector<XModel> m_ret_vec_x = vector<XModel>();
+    vector<XModel> m_ret_vec_xModel = vector<XModel>();
+    vector<CoordinateModel> m_ret_vec_plot = vector<CoordinateModel>();
     //utils 工具
     ParseX *m_pParseX = new ParseX();//x
     ParseA *m_pParseA = new ParseA();//a
@@ -45,7 +50,8 @@ private:
     ComputeQevj *m_pComputeQevj = new ComputeQevj();//Qevj
     ComputeQ *m_pComputeQ = new ComputeQ();//Q
     ComputeN *m_pComputeN = new ComputeN();//n
-    ComputePlot *m_pComputePlot = new ComputePlot();//fai 高斯分布
+    ComputeY *m_pComputeY = new ComputeY();//y
+    ComputePlot *m_pComputePlot = new ComputePlot();//fai
 };
 
 #endif // BRIGDE_H
