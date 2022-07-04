@@ -15,20 +15,32 @@ std::vector<CoordinateModel> ComputePlot::computPlots(float min_x, float max_x, 
         vec_x_plot.push_back(x);
     }
     //4. 计算
-    for(size_t i = 0; i < vec_x_basic.size(); i++){
-        for(size_t j = 0; j < vec_x_plot.size(); j++){
-            CoordinateModel coordinate = computeCoordinate(fWidth_L, fWidth_V, vec_x_basic[i], vec_x_plot[j]);
-            if(vec_ret.size() == 0 || j > vec_ret.size() -1){
+    for(size_t i = 0; i < vec_x_plot.size(); i++){
+        for(size_t j = 0; j < vec_x_basic.size(); j++){
+            CoordinateModel coordinate = computeCoordinate(fWidth_L, fWidth_V, vec_x_basic[j], vec_x_plot[i]);
+            if(vec_ret.size() == 0 || i > vec_ret.size() -1){
                 vec_ret.push_back(coordinate);
             } else {
-                vec_ret[j].y += coordinate.y;
+                vec_ret[i].y += coordinate.y;
             }
         }
     }
     return vec_ret;
 }
 
-std::vector<CoordinateModel> ComputePlot::computPlotsTest(float weight, float Trot)
+vector<CoordinateModel> ComputePlot::computBasicPlots(vector<XModel> vec_x)
+{
+    vector<CoordinateModel> vec_ret = vector<CoordinateModel>();
+    for(size_t i = 0; i < vec_x.size(); i++){
+        CoordinateModel coordinate = CoordinateModel();
+        coordinate.x = vec_x[i].x;
+        coordinate.y = vec_x[i].y;
+        vec_ret.push_back(coordinate);
+    }
+    return vec_ret;
+}
+
+void ComputePlot::computTestPlots(float weight, float Trot, vector<CoordinateModel> *response)
 {
     long double fWidth_D = 2 * (5.94 * pow(10, -6)) * sqrt(Trot / 296 / weight);
     long double fWidth_L = pow(2 * (296 / Trot), 0.5);
@@ -37,7 +49,7 @@ std::vector<CoordinateModel> ComputePlot::computPlotsTest(float weight, float Tr
     //?. 曲线测试
     vector<long double> vec_x_plot = vector<long double>();
     vec_x_plot.clear();
-    for(float x = 0; x <= 20 ; x += 0.1){
+    for(float x = 0; x <= 40 ; x += 0.1){
         vec_x_plot.push_back(x);
     }
     XModel x_test = XModel();
@@ -45,9 +57,8 @@ std::vector<CoordinateModel> ComputePlot::computPlotsTest(float weight, float Tr
     x_test.y = 1;
     for(size_t i = 0; i < vec_x_plot.size(); i++){
         CoordinateModel coordinate = computeCoordinate(fWidth_L, fWidth_V, x_test, vec_x_plot[i]);
-        vec_ret.push_back(coordinate);
+        response->push_back(coordinate);
     }
-    return vec_ret;
 }
 
 vector<XModel> ComputePlot::computeBasic(float min_x, float max_x, vector<XModel> vec_x)

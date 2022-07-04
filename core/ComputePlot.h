@@ -13,7 +13,9 @@ class ComputePlot
 public:
     std::vector<CoordinateModel> computPlots(float min_x, float max_x, float step, float weight, float Trot, vector<XModel> vec_x);
 
-    std::vector<CoordinateModel> computPlotsTest(float weight, float Trot);
+    vector<CoordinateModel> computBasicPlots(vector<XModel> vec_x);
+
+    void computTestPlots(float weight, float Trot, vector<CoordinateModel> *response);
 private:
     vector<XModel> computeBasic(float min_x, float max_x, vector<XModel> vec_x);
     //=========method 0

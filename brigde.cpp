@@ -71,7 +71,17 @@ std::vector<CoordinateModel> Brigde::compute(float min_x, float max_x, float ste
     m_pComputeN = new ComputeN();//n
     m_pComputeY = new ComputeY();//y
     m_pComputePlot = new ComputePlot();//fai
-    return m_ret_vec_plot;
+    return m_ret_vec_coordinate;
+}
+
+std::vector<CoordinateModel> Brigde::getData()
+{
+    return m_ret_vec_coordinate;
+}
+
+std::vector<CoordinateModel> Brigde::getBasicData()
+{
+    return m_pComputePlot->computBasicPlots(m_ret_vec_xModel);
 }
 
 long double Brigde::compute_q()
@@ -112,13 +122,12 @@ long double Brigde::compute_n()
 
 std::vector<XModel> Brigde::compute_y()
 {
-//    m_pComputeY->init(m_req_x_a->h, m_req_x_a->c, m_ret_n, m_ret_Q, m_ret_vec_xModel);
     m_ret_vec_xModel = m_pComputeY->compute_y(m_req_x_a->h, m_req_x_a->c, m_ret_n, m_ret_Q, m_ret_vec_xModel);
     return m_ret_vec_xModel;
 }
 
 std::vector<CoordinateModel> Brigde::compute_plot(float min_x, float max_x, float step, float weight)
 {
-    m_ret_vec_plot = m_pComputePlot->computPlots(min_x, max_x, step, weight, m_req_x_a->Trot, m_ret_vec_xModel);
-    return m_ret_vec_plot;
+    m_ret_vec_coordinate = m_pComputePlot->computPlots(min_x, max_x, step, weight, m_req_x_a->Trot, m_ret_vec_xModel);
+    return m_ret_vec_coordinate;
 }
