@@ -113,9 +113,10 @@ long double Brigde::compute_q()
     m_ret_Q = 0;
     for(size_t i = 0; i < m_req_Q->size(); i++){
         QReq *qReq = &m_req_Q->at(i);
-        m_pComputeQ->init(m_pParseX->ParseStr2VJ(qReq->g, qReq->Te, qReq->url),
-                          qReq->h, qReq->c, qReq->K, qReq->Tex, qReq->Tvib, qReq->Trot, qReq->gne, qReq->gno, qReq->gbase);
-        m_ret_Q += m_pComputeQ->sumQ();
+        m_ret_Q += m_pComputeQ->sumQ(m_pParseX->ParseStr2VJ(qReq->g, qReq->Te, qReq->url),
+                                     qReq->h, qReq->c, qReq->K,
+                                     qReq->Tex, qReq->Tvib, qReq->Trot,
+                                     qReq->gne, qReq->gno, qReq->gbase);
     }
     return m_ret_Q;
 }
@@ -129,18 +130,16 @@ std::vector<XModel> Brigde::compute_x_a()
 
 std::vector<XModel> Brigde::compute_qevj()
 {
-    m_pComputeQevj->init(m_ret_vec_xModel, m_req_x_a->h,  m_req_x_a->c,  m_req_x_a->K,
-                         m_req_x_a->Tex, m_req_x_a->Tvib, m_req_x_a->Trot,
-                         m_req_x_a->gne, m_req_x_a->gno, m_req_x_a->gbase);
-    m_ret_vec_xModel = m_pComputeQevj->computeQevj_s();
+    m_ret_vec_xModel = m_pComputeQevj->computeQevj_s(m_ret_vec_xModel, m_req_x_a->h,  m_req_x_a->c,  m_req_x_a->K,
+                                                     m_req_x_a->Tex, m_req_x_a->Tvib, m_req_x_a->Trot,
+                                                     m_req_x_a->gne, m_req_x_a->gno, m_req_x_a->gbase);
     return m_ret_vec_xModel;
 }
 
 long double Brigde::compute_n()
 {
     //R=8.31 P=1.01*10^5 T=15000
-    m_pComputeN->init(8.31, 1.01 * pow(10, 5), m_req_x_a->Trot);
-    m_ret_n = m_pComputeN->compute_n();
+    m_ret_n = m_pComputeN->compute_n(8.31, 1.01 * pow(10, 5), m_req_x_a->Tex);
     return m_ret_n;
 }
 
@@ -152,6 +151,6 @@ std::vector<XModel> Brigde::compute_y()
 
 std::vector<CoordinateModel> Brigde::compute_plot(float min_x, float max_x, float step, float weight)
 {
-    m_ret_vec_coordinate = m_pComputePlot->computPlots(min_x, max_x, step, weight, m_req_x_a->Trot, m_ret_vec_xModel);
+    m_ret_vec_coordinate = m_pComputePlot->computPlots(min_x, max_x, step, weight, m_req_x_a->Tex, m_ret_vec_xModel);
     return m_ret_vec_coordinate;
 }
