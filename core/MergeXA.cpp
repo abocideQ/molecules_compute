@@ -7,7 +7,9 @@ vector<XModel> MergeXA::Merge(vector<XModel> x_vec, vector<AModel> a_vec)
     XModel *x_model = &x_vec[i];
     AModel a_model = FindA(*x_model, a_vec);
     x_model->a = a_model.ret_;
+    delete (&a_model);
   }
+  std::vector<AModel>().swap(a_vec);
   return x_vec;
 }
 

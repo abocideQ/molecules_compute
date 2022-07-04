@@ -5,6 +5,7 @@
 #include "qclickqlabel.h"
 #include "qcustomplot.h"
 #include "brigde.h"
+#include "qhandler.h"
 #include <thread>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -17,17 +18,16 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
-
 protected:
     void initWidgetTop();
     void initWidgetCenter();
     void initWidgetBottom();
-    long double ENumber(std::string num_str);
 
 private:
     Ui::MainWindow *ui;
     //top
     QWidget *m_pWidget_top;
+    QClickQLabel *m_pLabel_file_Temperature;
     QClickQLabel *m_pLabel_file_Q;
     QClickQLabel *m_pLabel_file_Xul_Aul;
     QClickQLabel *m_pLabel_distribution_test;
@@ -42,8 +42,11 @@ private:
     //core
     Brigde *m_pBrigde = new Brigde();
 
+    long double ENumber(std::string num_str);
+
 private slots:
     void on_qcustomplot_selection();//qcustomplot selection
+    void on_menu_file_Temperature();
     void on_menu_file_Xul_Aul();
     void on_menu_file_Q();
     void on_menu_distribution_test();

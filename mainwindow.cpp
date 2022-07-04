@@ -32,11 +32,15 @@ void MainWindow::initWidgetTop(){
     //    layout_top->setSizeConstraint(QLayout::SetMaximumSize);
     //    layout_top->setMargin(10);
     //    layout_top->setSpacing(0);
-    m_pLabel_file_Q = new QClickQLabel("Q");
+    m_pLabel_file_Temperature = new QClickQLabel("设置温度");
+    m_pLabel_file_Temperature->setMinimumWidth(80);
+    m_pLabel_file_Temperature->setMaximumHeight(36);
+    m_pLabel_file_Temperature->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    m_pLabel_file_Q = new QClickQLabel("设置Q");
     m_pLabel_file_Q->setMinimumWidth(80);
     m_pLabel_file_Q->setMaximumHeight(36);
     m_pLabel_file_Q->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    m_pLabel_file_Xul_Aul = new QClickQLabel("λul & Aul");
+    m_pLabel_file_Xul_Aul = new QClickQLabel("设置λ & A");
     m_pLabel_file_Xul_Aul->setMinimumWidth(80);
     m_pLabel_file_Xul_Aul->setMaximumHeight(36);
     m_pLabel_file_Xul_Aul->setAlignment(Qt::AlignmentFlag::AlignCenter);
@@ -48,10 +52,11 @@ void MainWindow::initWidgetTop(){
     m_pLabel_baisc_build->setMinimumWidth(80);
     m_pLabel_baisc_build->setMaximumHeight(36);
     m_pLabel_baisc_build->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    m_pLabel_build = new QClickQLabel("Build");
+    m_pLabel_build = new QClickQLabel("VIGOT数据");
     m_pLabel_build->setMinimumWidth(80);
     m_pLabel_build->setMaximumHeight(36);
     m_pLabel_build->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    layout_top->addWidget(m_pLabel_file_Temperature);
     layout_top->addWidget(m_pLabel_file_Q);
     layout_top->addWidget(m_pLabel_file_Xul_Aul);
     layout_top->addWidget(m_pLabel_distribution_test);
@@ -59,6 +64,7 @@ void MainWindow::initWidgetTop(){
     layout_top->addWidget(m_pLabel_build);
     layout_top->addSpacerItem(new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Fixed));
     //信号槽
+    connect(m_pLabel_file_Temperature, &QClickQLabel::clicked, this, &MainWindow::on_menu_file_Temperature);
     connect(m_pLabel_file_Q, &QClickQLabel::clicked, this, &MainWindow::on_menu_file_Q);
     connect(m_pLabel_file_Xul_Aul, &QClickQLabel::clicked, this, &MainWindow::on_menu_file_Xul_Aul);
     connect(m_pLabel_distribution_test, &QClickQLabel::clicked, this, &MainWindow::on_menu_distribution_test);
@@ -127,23 +133,41 @@ void MainWindow::on_qcustomplot_selection()
     }
 }
 
+void MainWindow::on_menu_file_Temperature()
+{
+    bool ret_ok;
+    //常量h
+    long double const_h = 6.63 * pow(10, -34);
+    //常量c
+    long double const_c = 2.99792458 * pow(10, 10);
+    //常量K
+    long double const_K = (1.38 * pow(10, -23));
+    //Tex Tvib Trot
+    float const_Tssss = QInputDialog::getText(this, "温度", tr("请输入温度"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+    if (!ret_ok || const_Tssss < 0){
+        return;
+    }
+    m_pBrigde->set_other_info(const_h, const_c, const_K, const_Tssss, const_Tssss, const_Tssss);
+}
+
 void MainWindow::on_menu_file_Q()
 {
     try {
         while(1){
             bool ret_ok;
             //A态
+            QString file_q_url = QFileDialog::getOpenFileName(this, "态文件", "", "All files(*.*)");
+            if (file_q_url.isEmpty()){
+                goto __Exit;
+            }
             QString file_q_g = QInputDialog::getText(this, tr("态名称"), tr("请输入名称"), QLineEdit::Normal, 0, &ret_ok);
             if (!ret_ok || file_q_g.isEmpty()){
                 goto __Exit;
             }
+            //Te
             float file_q_Te = QInputDialog::getText(this, file_q_g , "请输入跃迁值", QLineEdit::Normal, 0, &ret_ok).toFloat();
             if (!ret_ok || file_q_Te < 0){
                 return;
-            }
-            QString file_q_url = QFileDialog::getOpenFileName(this, file_q_g + "文件", "", "All files(*.*)");
-            if (file_q_url.isEmpty()){
-                goto __Exit;
             }
             //gne
             float const_gne = QInputDialog::getText(this, file_q_g, tr("请输入偶数时的值gne"), QLineEdit::Normal, 0, &ret_ok).toFloat();
@@ -160,24 +184,12 @@ void MainWindow::on_menu_file_Q()
             if (!ret_ok || const_gbase < 0){
                 goto __Exit;
             }
-            //常量h
-            long double const_h = 6.63 * pow(10, -34);
-            //常量c
-            long double const_c = 2.99792458 * pow(10, 10);
-            //常量K
-            long double const_K = (1.38 * pow(10, -23));
-            //Tex Tvib Trot
-            float const_Tssss = QInputDialog::getText(this, "温度", tr("请输入温度"), QLineEdit::Normal, 0, &ret_ok).toFloat();
-            if (!ret_ok || const_Tssss < 0){
-                goto __Exit;
-            }
             //======================save
             QByteArray bytes = file_q_url.toLocal8Bit();//.toLatin1().data() 无效
             char *file_url_char = new char[1024];
             //        memcpy(file_url_char, bytes.data(), bytes.size()+1);  //存放结束符
             strcpy(file_url_char ,bytes.data());
             m_pBrigde->add_q_info(file_q_g.toStdString(), file_q_Te, file_url_char,
-                                  const_h, const_c, const_K, const_Tssss, const_Tssss,const_Tssss,
                                   const_gne, const_gno, const_gbase);
         }
 __Exit:
@@ -192,6 +204,10 @@ void MainWindow::on_menu_file_Xul_Aul()
     try {
         bool ret_ok;
         //A态
+        QString file_1_url = QFileDialog::getOpenFileName(this, "低能态文件", "", "All files(*.*)");
+        if (file_1_url.isEmpty()){
+            return;
+        }
         QString file_1_g = QInputDialog::getText(this, tr("低能态"),tr("请输入名称"), QLineEdit::Normal, 0, &ret_ok);
         if (!ret_ok || file_1_g.isEmpty()){
             return;
@@ -200,12 +216,11 @@ void MainWindow::on_menu_file_Xul_Aul()
         if (!ret_ok || file_1_t < 0){
             return;
         }
-        QString file_1_url = QFileDialog::getOpenFileName(this, "低能态文件", "", "All files(*.*)");
-        if (file_1_url.isEmpty()){
+        //B态
+        QString file_2_url = QFileDialog::getOpenFileName(this, "高能态文件", "", "All files(*.*)");
+        if (file_2_url.isEmpty()){
             return;
         }
-        qDebug()<< file_1_url;
-        //B态
         QString file_2_g = QInputDialog::getText(this, tr("高能态"),tr("请输入名称"), QLineEdit::Normal,0, &ret_ok);
         if (!ret_ok || file_2_g.isEmpty()){
             return;
@@ -214,11 +229,6 @@ void MainWindow::on_menu_file_Xul_Aul()
         if (!ret_ok || file_2_t < 0){
             return;
         }
-        QString file_2_url = QFileDialog::getOpenFileName(this, "高能态文件", "", "All files(*.*)");
-        if (file_2_url.isEmpty()){
-            return;
-        }
-        qDebug()<< file_2_url;
         //gne
         float const_gne = QInputDialog::getText(this, tr("高能态"),tr("请输入偶数时的值gne"), QLineEdit::Normal, 0, &ret_ok).toFloat();
         if (!ret_ok || const_gne < 0){
@@ -234,20 +244,9 @@ void MainWindow::on_menu_file_Xul_Aul()
         if (!ret_ok || const_gbase < 0){
             return;
         }
-        //常量h
-        long double const_h = 6.63 * pow(10, -34);
-        //常量c
-        long double const_c = 2.99792458 * pow(10, 10);
-        //常量K
-        long double const_K = (1.38 * pow(10, -23));
         //Aul
         QString file_a_url = QFileDialog::getOpenFileName(this, "请选择Aul文件", "", "All files(*.*)");
         if (file_a_url.isEmpty()){
-            return;
-        }
-        //Tex Tvib Trot
-        float const_Tssss = QInputDialog::getText(this, tr("温度"),tr("请输入温度"), QLineEdit::Normal, 0, &ret_ok).toFloat();
-        if (!ret_ok || const_Tssss < 0){
             return;
         }
         //======================save
@@ -269,8 +268,6 @@ void MainWindow::on_menu_file_Xul_Aul()
                                 file_2_g.toStdString(),
                                 file_2_t,
                                 file_2_url_char,
-                                const_h, const_c, const_K,
-                                const_Tssss, const_Tssss,const_Tssss,
                                 const_gne, const_gno, const_gbase,
                                 file_a_url_char);
     } catch (QException e) {
@@ -316,7 +313,6 @@ void MainWindow::on_menu_basic_build()
 
 void MainWindow::on_menu_build()
 {
-
     // compute
     bool ret_ok;
     float min = QInputDialog::getText(this, tr("min"),tr("min"), QLineEdit::Normal, 0, &ret_ok).toFloat();
@@ -342,11 +338,6 @@ void MainWindow::on_menu_build()
     m_pQCumstomPlot->replot();
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
-}
-
 //科学计数法
 long double MainWindow::ENumber(std::string num_str){
     long double ret_ = 0;
@@ -367,4 +358,9 @@ long double MainWindow::ENumber(std::string num_str){
     std::string num_b = num_str.substr(index_E + 2, num_str.length() - (index_E + 2));
     ret_ = std::stold(num_a) * (std::pow(10, index_E_base * std::stoi(num_b)));
     return ret_;
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
 }

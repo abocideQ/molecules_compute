@@ -4,95 +4,96 @@ void ComputeQ::init(vector<VJModel> vec_x, long double h, long double c, long do
                     long double Tex, long double Tvib, long double Trot,
                     float gne, float gno, float gbase)
 {
-  m_vec_x = vec_x;
-  const_h = h;
-  const_c = c;
-  const_K = K;
-  const_Tex = Tex;
-  const_Tvib = Tvib;
-  const_Trot = Trot;
-  const_gne = gne;
-  const_gno = gno;
-  const_gbase = gbase;
+    m_vec_x = vec_x;
+    const_h = h;
+    const_c = c;
+    const_K = K;
+    const_Tex = Tex;
+    const_Tvib = Tvib;
+    const_Trot = Trot;
+    const_gne = gne;
+    const_gno = gno;
+    const_gbase = gbase;
 }
 
 long double ComputeQ::sumQ()
 {
-  m_vec_Te = vector<VJModel>();
-  m_vec_Gv = vector<VJModel>();
-  m_vec_Fj = vector<VJModel>();
-  m_vec_Te.push_back(m_vec_x[0]);
-  for (size_t i = 0; i < m_vec_x.size(); i++)
-  {
-    if (m_vec_x[i].j > 0)
+    m_vec_Te = vector<VJModel>();
+    m_vec_Gv = vector<VJModel>();
+    m_vec_Fj = vector<VJModel>();
+    m_vec_Te.push_back(m_vec_x[0]);
+    for (size_t i = 0; i < m_vec_x.size(); i++)
     {
-      continue;
+        if (m_vec_x[i].j > 0)
+        {
+            continue;
+        }
+        m_vec_Gv.push_back(m_vec_x[i]);
     }
-    m_vec_Gv.push_back(m_vec_x[i]);
-  }
-  for (size_t i = 0; i < m_vec_x.size(); i++)
-  {
-    m_vec_Fj.push_back(m_vec_x[i]);
-  }
-  long double Q = sumQe();
-  m_vec_Te.clear();
-  m_vec_Gv.clear();
-  m_vec_Fj.clear();
-  return Q;
+    for (size_t i = 0; i < m_vec_x.size(); i++)
+    {
+        m_vec_Fj.push_back(m_vec_x[i]);
+    }
+    long double Q = sumQe();
+    std::vector<VJModel>().swap(m_vec_Te);
+    std::vector<VJModel>().swap(m_vec_Gv);
+    std::vector<VJModel>().swap(m_vec_Fj);
+    std::vector<VJModel>().swap(m_vec_x);
+    return Q;
 }
 
 long double ComputeQ::sumQe()
 {
-  long double ret_Qe = 0;
-  long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_x[0].t) / (const_K * const_Tex))) * sumQv();
-  ret_Qe = DecimalUtils::sum_(ret_Qe, exp);
-  return ret_Qe;
+    long double ret_Qe = 0;
+    long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_x[0].t) / (const_K * const_Tex))) * sumQv();
+    ret_Qe = DecimalUtils::sum_(ret_Qe, exp);
+    return ret_Qe;
 }
 
 long double ComputeQ::sumQv()
 {
-  long double ret_Qv = 0;
-  for (size_t i = 0; i < m_vec_Gv.size(); i++)
-  {
-    long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_Gv[i].e) / (const_K * const_Tvib))) * sumQj(m_vec_Gv[i].v);
-    ret_Qv = DecimalUtils::sum_(ret_Qv, exp);
-  }
-  return ret_Qv;
+    long double ret_Qv = 0;
+    for (size_t i = 0; i < m_vec_Gv.size(); i++)
+    {
+        long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * m_vec_Gv[i].e) / (const_K * const_Tvib))) * sumQj(m_vec_Gv[i].v);
+        ret_Qv = DecimalUtils::sum_(ret_Qv, exp);
+    }
+    return ret_Qv;
 }
 
 long double ComputeQ::sumQj(float v)
 {
-  long double ret_Qj = 0;
-  long double vnj0 = 0;
-  for (size_t i = 0; i < m_vec_Fj.size(); i++)
-  {
-    if (m_vec_Fj[i].v != v)
+    long double ret_Qj = 0;
+    long double vnj0 = 0;
+    for (size_t i = 0; i < m_vec_Fj.size(); i++)
     {
-      continue;
+        if (m_vec_Fj[i].v != v)
+        {
+            continue;
+        }
+        else if (m_vec_Fj[i].j == 0)
+        {
+            vnj0 = m_vec_Fj[i].e;
+        }
+        long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * (m_vec_Fj[i].e - vnj0)) / (const_K * const_Trot)));
+        exp = sumgj(m_vec_Fj[i].j) * exp;
+        ret_Qj = DecimalUtils::sum_(ret_Qj, exp);
     }
-    else if (m_vec_Fj[i].j == 0)
-    {
-      vnj0 = m_vec_Fj[i].e;
-    }
-    long double exp = DecimalUtils::exp_(-1 * ((const_h * const_c * (m_vec_Fj[i].e - vnj0)) / (const_K * const_Trot)));
-    exp = sumgj(m_vec_Fj[i].j) * exp;
-    ret_Qj = DecimalUtils::sum_(ret_Qj, exp);
-  }
-  return ret_Qj;
+    return ret_Qj;
 }
 
 long double ComputeQ::sumgj(float j)
 {
-  // gj = gn * base * (2j +2) ;
-  // gne 偶 gno 奇
-  long double gj = 0;
-  if (DecimalUtils::even_(j))
-  { //偶
-    gj = const_gne * const_gbase * ((2 * j) + 1);
-  }
-  else
-  { //奇
-    gj = const_gno * const_gbase * ((2 * j) + 1);
-  }
-  return gj;
+    // gj = gn * base * (2j +2) ;
+    // gne 偶 gno 奇
+    long double gj = 0;
+    if (DecimalUtils::even_(j))
+    { //偶
+        gj = const_gne * const_gbase * ((2 * j) + 1);
+    }
+    else
+    { //奇
+        gj = const_gno * const_gbase * ((2 * j) + 1);
+    }
+    return gj;
 }

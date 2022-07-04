@@ -15,13 +15,14 @@ class Brigde
 public:
     //Request Q
     void add_q_info(string _pUrl_q, float Te, string g,
-                    long double h, long double c, long double K,
-                    long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase);
+                    int gne, int gno, long double gbase);
     //Request x & a
     void set_x_a_info(string _g_1, float _t_1, string _pUrl_1, string _g_2, float _t_2, string _pUrl_2,
-                      long double h, long double c, long double K,
-                      long double Tex, long double Tvib, long double Trot, int gne, int gno, long double gbase,
+                      int gne, int gno, long double gbase,
                       string _pUrl_a);
+    //Request other
+    void set_other_info(long double h, long double c, long double K,
+                      long double Tex, long double Tvib, long double Trot);
     //Compute
     std::vector<CoordinateModel> compute(float min_x, float max_x, float step, float weight);
     //data
@@ -43,6 +44,12 @@ protected:
     std::vector<CoordinateModel> compute_plot(float min_x, float max_x, float step, float weight);
 private:
     //Req 请求
+    long double m_req_h = 0;
+    long double m_req_c = 0;
+    long double m_req_K = 0;
+    long double m_req_Tex = 0;
+    long double m_req_Tvib = 0;
+    long double m_req_Trot = 0;
     vector<QReq> *m_req_Q = new vector<QReq>();//Q
     XAReq *m_req_x_a = new XAReq();//x_a_Qevj
     //result 结果

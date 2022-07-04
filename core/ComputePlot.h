@@ -19,7 +19,7 @@ public:
 private:
     vector<XModel> computeBasic(float min_x, float max_x, vector<XModel> vec_x);
     //=========method 0
-    CoordinateModel computeCoordinate(long double fWidth_L, long double fWidth_V, XModel x_basic, long double x);
+    CoordinateModel *computeCoordinate(long double fWidth_L, long double fWidth_V, XModel x_basic, long double x);
 //    =========method 1
 //    vector<CoordinateModel> computePlot(float Trot, float weight, vector<XModel> vec_x_basic, vector<long double> vec_plot_x);
 //    //Trot:15000 weight:分子量

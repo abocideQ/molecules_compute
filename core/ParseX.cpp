@@ -54,10 +54,12 @@ vector<XModel> ParseX::XVector(string g1, float t1,string pUrl1, string g2, floa
             x_model.t2 = vj2.t;
             // x
             x_model.x = x_model.e2 - x_model.e1 + (x_model.t2 - x_model.t1);
-//            x_model.x = (h * c) / x_model.x;
+            //            x_model.x = (h * c) / x_model.x;
             ret_.push_back(x_model);
         }
     }
+    std::vector<VJModel>().swap(vec_vj1);
+    std::vector<VJModel>().swap(vec_vj2);
     return ret_;
 }
 

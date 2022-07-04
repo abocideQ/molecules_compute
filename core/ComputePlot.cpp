@@ -17,12 +17,13 @@ std::vector<CoordinateModel> ComputePlot::computPlots(float min_x, float max_x, 
     //4. 计算
     for(size_t i = 0; i < vec_x_plot.size(); i++){
         for(size_t j = 0; j < vec_x_basic.size(); j++){
-            CoordinateModel coordinate = computeCoordinate(fWidth_L, fWidth_V, vec_x_basic[j], vec_x_plot[i]);
+            CoordinateModel *coordinate = computeCoordinate(fWidth_L, fWidth_V, vec_x_basic[j], vec_x_plot[i]);
             if(vec_ret.size() == 0 || i > vec_ret.size() -1){
-                vec_ret.push_back(coordinate);
+                vec_ret.push_back(*coordinate);
             } else {
-                vec_ret[i].y += coordinate.y;
+                vec_ret[i].y += coordinate->y;
             }
+            delete coordinate;
         }
     }
     return vec_ret;
@@ -56,8 +57,9 @@ void ComputePlot::computTestPlots(float weight, float Trot, vector<CoordinateMod
     x_test.x = 10;
     x_test.y = 1;
     for(size_t i = 0; i < vec_x_plot.size(); i++){
-        CoordinateModel coordinate = computeCoordinate(fWidth_L, fWidth_V, x_test, vec_x_plot[i]);
-        response->push_back(coordinate);
+        CoordinateModel *coordinate = computeCoordinate(fWidth_L, fWidth_V, x_test, vec_x_plot[i]);
+        response->push_back(*coordinate);
+        delete coordinate;
     }
 }
 
@@ -106,7 +108,7 @@ vector<XModel> ComputePlot::computeBasic(float min_x, float max_x, vector<XModel
     return vec_ret;
 }
 
-CoordinateModel ComputePlot::computeCoordinate(long double fWidth_L, long double fWidth_V, XModel x_basic, long double x)
+CoordinateModel *ComputePlot::computeCoordinate(long double fWidth_L, long double fWidth_V, XModel x_basic, long double x)
 {
     CoordinateModel *model = new CoordinateModel();
     long double CSPRD = x - x_basic.x;
@@ -123,7 +125,7 @@ CoordinateModel ComputePlot::computeCoordinate(long double fWidth_L, long double
     model->xModel = x_basic;
     model->x = x;
     model->y = GV * x_basic.y;
-    return *model;
+    return model;
 }
 
 //vector<CoordinateModel> ComputePlot::computePlot(float Trot, float weight, vector<XModel> vec_x_basic, vector<long double> vec_plot_x)

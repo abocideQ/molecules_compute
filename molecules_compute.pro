@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    qhandler.cpp \
     qclickqlabel.cpp \
     qcustomplot.cpp \
     brigde.cpp \
@@ -34,11 +35,12 @@ SOURCES += \
 #    core/FileUtils.cpp \
 #    core/FileWriter.cpp \
 #    core/DecimalUtils.cpp \
-#    gmp/gmp.cpp \
+ \#    gmp/gmp.cpp \
 
 
 HEADERS += \
     mainwindow.h \
+    qhandler.h \
     qclickqlabel.h \
     qcustomplot.h \
     brigde.h \
@@ -55,7 +57,7 @@ HEADERS += \
     core/FileWriter.h \
     core/DecimalUtils.h \
 #    core/LongDouble.h \
-    gmp/gmp.h \
+    gmp/gmp.h \ \
 
 
 FORMS += \
