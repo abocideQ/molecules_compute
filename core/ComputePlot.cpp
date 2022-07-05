@@ -18,7 +18,7 @@ std::vector<CoordinateModel> ComputePlot::computPlots(float min_x, float max_x, 
     for(size_t i = 0; i < vec_x_plot.size(); i++){
         for(size_t j = 0; j < vec_x_basic.size(); j++){
             CoordinateModel *coordinate = computeCoordinate(fWidth_L, fWidth_V, vec_x_basic[j], vec_x_plot[i]);
-            if(vec_ret.size() == 0 || i > vec_ret.size() -1){
+            if(i == vec_ret.size()){
                 vec_ret.push_back(*coordinate);
             } else {
                 vec_ret[i].y += coordinate->y;

@@ -338,7 +338,7 @@ void MainWindow::on_menu_build()
         return;
     }
     try {
-        std::thread t(&Brigde::compute, m_pBrigde, min, max, 0.02, weight);
+        std::thread t(&Brigde::compute, m_pBrigde, min, max, 0.1, weight);
         t.join();
         vector<CoordinateModel> vec_coordinate = m_pBrigde->getData();
         // plot
