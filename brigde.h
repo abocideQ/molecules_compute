@@ -16,6 +16,7 @@ public:
     //Request Q
     void add_q_info(string _pUrl_q, float Te, string g,
                     int gne, int gno, long double gbase);
+    void clear_q_info();
     //Request x & a
     void set_x_a_info(string _g_1, float _t_1, string _pUrl_1, string _g_2, float _t_2, string _pUrl_2,
                       int gne, int gno, long double gbase,

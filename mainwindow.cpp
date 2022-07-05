@@ -153,6 +153,7 @@ void MainWindow::on_menu_file_Temperature()
 void MainWindow::on_menu_file_Q()
 {
     try {
+        m_pBrigde->clear_q_info();
         while(1){
             bool ret_ok;
             //A态
@@ -278,8 +279,17 @@ void MainWindow::on_menu_file_Xul_Aul()
 void MainWindow::on_menu_distribution_test()
 {
     // 曲线测试
+    bool ret_ok;
+    float tempreture = QInputDialog::getText(this, tr("tempreture"),tr("tempreture"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+    if (!ret_ok || tempreture < 0){
+        return;
+    }
+    float weight = QInputDialog::getText(this, tr("weight"),tr("weight"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+    if (!ret_ok || weight < 0){
+        return;
+    }
     vector<CoordinateModel> vec_coordinate = vector<CoordinateModel>();
-    std::thread t(&ComputePlot::computTestPlots, ComputePlot(), 14.0f, 15000, &vec_coordinate);
+    std::thread t(&ComputePlot::computTestPlots, ComputePlot(), weight, tempreture, &vec_coordinate);
     t.join();
     // plot
     QVector<double> m_x(vec_coordinate.size()), m_y(vec_coordinate.size());
@@ -323,19 +333,27 @@ void MainWindow::on_menu_build()
     if (!ret_ok || max < 0){
         return;
     }
-    std::thread t(&Brigde::compute, m_pBrigde, min, max, 0.02, 14);
-    t.join();
-    vector<CoordinateModel> vec_coordinate = m_pBrigde->getData();
-    // plot
-    QVector<double> m_x(vec_coordinate.size()), m_y(vec_coordinate.size());
-    for (size_t i = 0; i < vec_coordinate.size(); i++)
-    {
-        m_x[i] = vec_coordinate[i].x;
-        m_y[i] = vec_coordinate[i].y;
+    float weight = QInputDialog::getText(this, tr("weight"),tr("weight"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+    if (!ret_ok || weight < 0){
+        return;
     }
-    m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
-    m_pQCumstomPlot->graph(0)->rescaleAxes();
-    m_pQCumstomPlot->replot();
+    try {
+        std::thread t(&Brigde::compute, m_pBrigde, min, max, 0.02, weight);
+        t.join();
+        vector<CoordinateModel> vec_coordinate = m_pBrigde->getData();
+        // plot
+        QVector<double> m_x(vec_coordinate.size()), m_y(vec_coordinate.size());
+        for (size_t i = 0; i < vec_coordinate.size(); i++)
+        {
+            m_x[i] = vec_coordinate[i].x;
+            m_y[i] = vec_coordinate[i].y;
+        }
+        m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
+        m_pQCumstomPlot->graph(0)->rescaleAxes();
+        m_pQCumstomPlot->replot();
+    } catch (exception e) {
+        std::cout << e.what();
+    }
 }
 
 //科学计数法

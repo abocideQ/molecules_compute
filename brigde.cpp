@@ -22,6 +22,11 @@ void Brigde::add_q_info(string g, float Te, string _pUrl_q,
     m_req_Q->push_back(*qReq);
 }
 
+void Brigde::clear_q_info()
+{
+    std::vector<QReq>().swap(*m_req_Q);
+}
+
 void Brigde::set_x_a_info(string _g_1, float _Te1, string _pUrl_1, string _g_2, float _Te2, string _pUrl_2,
                           int gne, int gno, long double gbase,
                           string _pUrl_a)
@@ -72,6 +77,7 @@ void Brigde::set_other_info(long double h, long double c, long double K, long do
 
 std::vector<CoordinateModel> Brigde::compute(float min_x, float max_x, float step, float weight)
 {
+    std::vector<CoordinateModel>().swap(m_ret_vec_coordinate);
     compute_q();
     compute_x_a();
     compute_qevj();
@@ -79,14 +85,14 @@ std::vector<CoordinateModel> Brigde::compute(float min_x, float max_x, float ste
     compute_y();
     compute_plot(min_x, max_x, step, weight);
     //free
-    free(m_pParseX);
-    free(m_pParseA);
-    free(m_pMergeXA);
-    free(m_pComputeQevj);
-    free(m_pComputeQ);
-    free(m_pComputeN);
-    free(m_pComputeY);
-    free(m_pComputePlot);
+    delete(m_pParseX);
+    delete(m_pParseA);
+    delete(m_pMergeXA);
+    delete(m_pComputeQevj);
+    delete(m_pComputeQ);
+    delete(m_pComputeN);
+    delete(m_pComputeY);
+    delete(m_pComputePlot);
     m_pParseX = new ParseX();//x
     m_pParseA = new ParseA();//a
     m_pMergeXA = new MergeXA();//x & a
