@@ -3,21 +3,17 @@
 std::vector<CoordinateModel> ComputePlot::computPlots(float min_x, float max_x, float step, float weight, float Trot, vector<XModel> vec_x)
 {
     vector<CoordinateModel> vec_ret = vector<CoordinateModel>();
-    //1. 初始化 展宽
-    long double fWidth_D = 2 * (5.94 * pow(10, -6)) * sqrt(Trot / 296 / weight);
-    long double fWidth_L = pow(2 * (296 / Trot), 0.5);
-    long double fWidth_V = (0.5346 * fWidth_L) + sqrt((0.2166 * pow(fWidth_L, 2)) + pow(fWidth_D, 2));
-    //2. 初始化 区间内 基准x
+    //1. 初始化 区间内 基准x
     vector<XModel> vec_x_basic = computeBasic(min_x, max_x, vec_x);
-    //3. 初始化 区间内 所有x点 -> step计算 -> x = minx + n*step
+    //2. 初始化 区间内 所有x点 -> step计算 -> x = minx + n*step
     vector<long double> vec_x_plot = vector<long double>();
     for(float x = min_x; x <= max_x ; x += step){
         vec_x_plot.push_back(x);
     }
-    //4. 计算
+    //3. 计算
     for(size_t i = 0; i < vec_x_plot.size(); i++){
         for(size_t j = 0; j < vec_x_basic.size(); j++){
-            CoordinateModel *coordinate = computeCoordinate(fWidth_L, fWidth_V, vec_x_basic[j], vec_x_plot[i]);
+            CoordinateModel *coordinate = computeCoordinate(weight, Trot, vec_x_basic[j], vec_x_plot[i]);
             if(i == vec_ret.size()){
                 vec_ret.push_back(*coordinate);
             } else {
@@ -43,8 +39,11 @@ vector<CoordinateModel> ComputePlot::computBasicPlots(vector<XModel> vec_x)
 
 void ComputePlot::computTestPlots(float weight, float Trot, vector<CoordinateModel> *response)
 {
-    long double fWidth_D = 2 * (5.94 * pow(10, -6)) * sqrt(Trot / 296 / weight);
-    long double fWidth_L = pow(2 * (296 / Trot), 0.5);
+    XModel x_test = XModel();
+    x_test.x = 20;
+    x_test.y = 1;
+    long double fWidth_D = 2 * (5.94 * pow(10, -6)) * x_test.x  * sqrt(Trot / 296 / weight);
+    long double fWidth_L = 2 * 1 * pow((296 / Trot), 0.5);
     long double fWidth_V = (0.5346 * fWidth_L) + sqrt((0.2166 * pow(fWidth_L, 2)) + pow(fWidth_D, 2));
     vector<CoordinateModel> vec_ret = vector<CoordinateModel>();
     //?. 曲线测试
@@ -53,9 +52,6 @@ void ComputePlot::computTestPlots(float weight, float Trot, vector<CoordinateMod
     for(float x = 0; x <= 40 ; x += 0.1){
         vec_x_plot.push_back(x);
     }
-    XModel x_test = XModel();
-    x_test.x = 10;
-    x_test.y = 1;
     for(size_t i = 0; i < vec_x_plot.size(); i++){
         CoordinateModel *coordinate = computeCoordinate(fWidth_L, fWidth_V, x_test, vec_x_plot[i]);
         response->push_back(*coordinate);
@@ -108,9 +104,12 @@ vector<XModel> ComputePlot::computeBasic(float min_x, float max_x, vector<XModel
     return vec_ret;
 }
 
-CoordinateModel *ComputePlot::computeCoordinate(long double fWidth_L, long double fWidth_V, XModel x_basic, long double x)
+CoordinateModel *ComputePlot::computeCoordinate(float weight, float Trot, XModel x_basic, long double x)
 {
     CoordinateModel *model = new CoordinateModel();
+    long double fWidth_D = 2 * (5.94 * pow(10, -6)) * x_basic.x  * sqrt(Trot / 296 / weight);
+    long double fWidth_L = 2 * 1 * pow((296 / Trot), 0.5);
+    long double fWidth_V = (0.5346 * fWidth_L) + sqrt((0.2166 * pow(fWidth_L, 2)) + pow(fWidth_D, 2));
     long double CSPRD = x - x_basic.x;
     if(CSPRD < 0){//绝对值
         CSPRD *= -1;

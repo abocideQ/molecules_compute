@@ -81,12 +81,12 @@ void MainWindow::initWidgetCenter(){
     // 1、轴拖动 2、轴缩放 3、图可选 4、 多选
     m_pQCumstomPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
     // 数据点显示图案
-    m_pQCumstomPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ScatterShape::ssDisc, 3));
+    m_pQCumstomPlot->graph(0)->setScatterStyle(QCPScatterStyle(QCPScatterStyle::ScatterShape::ssDisc, 2));
     m_pQCumstomPlot->graph(0)->setSelectable(QCP::SelectionType::stMultipleDataRanges);
     // 设置颜色/宽度等
     QPen *pen = new QPen;
     pen->setWidth(1);
-    pen->setColor(Qt::red);
+    pen->setColor(Qt::black);
     m_pQCumstomPlot->graph(0)->setPen(*pen);
     // 设置x轴，y轴 label
     m_pQCumstomPlot->xAxis->setLabel("x");
@@ -338,7 +338,7 @@ void MainWindow::on_menu_build()
         return;
     }
     try {
-        std::thread t(&Brigde::compute, m_pBrigde, min, max, 0.1, weight);
+        std::thread t(&Brigde::compute, m_pBrigde, min, max, 0.02, weight);
         t.join();
         vector<CoordinateModel> vec_coordinate = m_pBrigde->getData();
         // plot
