@@ -31,6 +31,10 @@ vector<XModel> ParseX::XVector(string g1, float t1,string pUrl1, string g2, floa
             {
                 continue;
             }
+            else if (vj2.j == vj1.j) //j'-j'' = 0 新判断 去掉此项
+            {
+                continue;
+            }
             else if (vj2.j - vj1.j > 1 || vj2.j - vj1.j < -1)
             {
                 continue;

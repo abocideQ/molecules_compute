@@ -56,7 +56,7 @@ void MainWindow::initWidgetTop(){
     m_pLabel_baisc_export->setMinimumWidth(80);
     m_pLabel_baisc_export->setMaximumHeight(36);
     m_pLabel_baisc_export->setAlignment(Qt::AlignmentFlag::AlignCenter);
-    m_pLabel_build = new QClickQLabel("VIGOT数据");
+    m_pLabel_build = new QClickQLabel("VOIGT数据");
     m_pLabel_build->setMinimumWidth(80);
     m_pLabel_build->setMaximumHeight(36);
     m_pLabel_build->setAlignment(Qt::AlignmentFlag::AlignCenter);
@@ -340,22 +340,24 @@ void MainWindow::on_menu_basic_export()
     std::string tmp_str = "";
     for(size_t i = 0; i < vec_x.size(); i++){
         XModel x_model = vec_x[i];
-        tmp_str += "g'=" + x_model.g1 + ", "
-                + "v'=" + DecimalUtils::to_string(x_model.v1) + " "
-                + "j'=" + DecimalUtils::to_string(x_model.j1) + " "
-                + "e'=" + DecimalUtils::to_string(x_model.e1) + " "
-                + "t'=" + DecimalUtils::to_string(x_model.t1) + " "
-                + "     "
-                + "g''=" + x_model.g2 + ", "
+        tmp_str +=
+//                "g'=" + x_model.g1 + ", "
+                "v'=" + DecimalUtils::to_string(x_model.v1) + " "
+//                + "j'=" + DecimalUtils::to_string(x_model.j1) + " "
+//                + "e'=" + DecimalUtils::to_string(x_model.e1) + " "
+//                + "t'=" + DecimalUtils::to_string(x_model.t1) + " "
+//                + "     "
+//                + "g''=" + x_model.g2 + ", "
                 + "v''=" + DecimalUtils::to_string(x_model.v2) + " "
-                + "j''=" + DecimalUtils::to_string(x_model.j2) + " "
-                + "e''=" + DecimalUtils::to_string(x_model.e2) + " "
-                + "t''=" + DecimalUtils::to_string(x_model.t2) + " "
-                + "     "
-                + "x= " + DecimalUtils::to_string(x_model.x) + " "
-                + "a= " + DecimalUtils::to_string(x_model.a) + " "
-                + "Qvej= " + DecimalUtils::to_string(x_model.Qevj) + " "
-                + "y= " + DecimalUtils::to_string(x_model.y) + " \n\n";
+//                + "j''=" + DecimalUtils::to_string(x_model.j2) + " "
+//                + "e''=" + DecimalUtils::to_string(x_model.e2) + " "
+//                + "t''=" + DecimalUtils::to_string(x_model.t2) + " "
+//                + "     "
+                + "x=" + DecimalUtils::to_string(x_model.x) + " "
+                + "Aul*Qevj=" + DecimalUtils::to_string(x_model.a * x_model.Qevj) + " "
+//                + "Qvej= " + DecimalUtils::to_string(x_model.Qevj) + " "
+//                + "y= " + DecimalUtils::to_string(x_model.y)
+                + " \n\n";
     }
     QFile file(path + "/基准数据.txt");
     file.open(QIODevice::ReadWrite);
