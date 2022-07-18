@@ -30,6 +30,8 @@ public:
     std::vector<CoordinateModel> getData();
     //basic data
     std::vector<CoordinateModel> getBasicData();
+    //basic data
+    std::vector<XModel> getBasicXModel();
 protected:
     //1. compute Q
     long double compute_q();

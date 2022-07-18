@@ -32,6 +32,7 @@ private:
     QClickQLabel *m_pLabel_file_Xul_Aul;
     QClickQLabel *m_pLabel_distribution_test;
     QClickQLabel *m_pLabel_baisc_build;
+    QClickQLabel *m_pLabel_baisc_export;
     QClickQLabel *m_pLabel_build;
     //center
     QWidget *m_pWidget_center;
@@ -51,6 +52,7 @@ private slots:
     void on_menu_file_Q();
     void on_menu_distribution_test();
     void on_menu_basic_build();
+    void on_menu_basic_export();
     void on_menu_build();
 };
 #endif // MAINWINDOW_H

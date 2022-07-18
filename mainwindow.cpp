@@ -52,6 +52,10 @@ void MainWindow::initWidgetTop(){
     m_pLabel_baisc_build->setMinimumWidth(80);
     m_pLabel_baisc_build->setMaximumHeight(36);
     m_pLabel_baisc_build->setAlignment(Qt::AlignmentFlag::AlignCenter);
+    m_pLabel_baisc_export = new QClickQLabel("基准导出");
+    m_pLabel_baisc_export->setMinimumWidth(80);
+    m_pLabel_baisc_export->setMaximumHeight(36);
+    m_pLabel_baisc_export->setAlignment(Qt::AlignmentFlag::AlignCenter);
     m_pLabel_build = new QClickQLabel("VIGOT数据");
     m_pLabel_build->setMinimumWidth(80);
     m_pLabel_build->setMaximumHeight(36);
@@ -61,6 +65,7 @@ void MainWindow::initWidgetTop(){
     layout_top->addWidget(m_pLabel_file_Xul_Aul);
     layout_top->addWidget(m_pLabel_distribution_test);
     layout_top->addWidget(m_pLabel_baisc_build);
+    layout_top->addWidget(m_pLabel_baisc_export);
     layout_top->addWidget(m_pLabel_build);
     layout_top->addSpacerItem(new QSpacerItem(0, 20, QSizePolicy::Expanding, QSizePolicy::Fixed));
     //信号槽
@@ -69,6 +74,7 @@ void MainWindow::initWidgetTop(){
     connect(m_pLabel_file_Xul_Aul, &QClickQLabel::clicked, this, &MainWindow::on_menu_file_Xul_Aul);
     connect(m_pLabel_distribution_test, &QClickQLabel::clicked, this, &MainWindow::on_menu_distribution_test);
     connect(m_pLabel_baisc_build, &QClickQLabel::clicked, this, &MainWindow::on_menu_basic_build);
+    connect(m_pLabel_baisc_export, &QClickQLabel::clicked, this, &MainWindow::on_menu_basic_export);
     connect(m_pLabel_build, &QClickQLabel::clicked, this, &MainWindow::on_menu_build);
 }
 
@@ -305,7 +311,7 @@ void MainWindow::on_menu_distribution_test()
 
 void MainWindow::on_menu_basic_build()
 {
-    //基准测试
+    //基准数据
     std::thread t(&Brigde::compute, m_pBrigde, 0, 100, 0.1, 14);
     t.join();
     vector<CoordinateModel> vec_coordinate = m_pBrigde->getBasicData();
@@ -319,6 +325,42 @@ void MainWindow::on_menu_basic_build()
     m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
     m_pQCumstomPlot->graph(0)->rescaleAxes();
     m_pQCumstomPlot->replot();
+}
+
+void MainWindow::on_menu_basic_export()
+{
+    //基准导出
+    std::thread t(&Brigde::compute, m_pBrigde, 0, 100, 0.1, 14);
+    t.join();
+    vector<XModel> vec_x = m_pBrigde->getBasicXModel();
+    QString path = QFileDialog::getExistingDirectory(this, "选择导出位置", nullptr, QFileDialog::ShowDirsOnly);
+    if (path.isEmpty()){
+        return;
+    }
+    std::string tmp_str = "";
+    for(size_t i = 0; i < vec_x.size(); i++){
+        XModel x_model = vec_x[i];
+        tmp_str += "g'=" + x_model.g1 + ", "
+                + "v'=" + DecimalUtils::to_string(x_model.v1) + " "
+                + "j'=" + DecimalUtils::to_string(x_model.j1) + " "
+                + "e'=" + DecimalUtils::to_string(x_model.e1) + " "
+                + "t'=" + DecimalUtils::to_string(x_model.t1) + " "
+                + "     "
+                + "g''=" + x_model.g2 + ", "
+                + "v''=" + DecimalUtils::to_string(x_model.v2) + " "
+                + "j''=" + DecimalUtils::to_string(x_model.j2) + " "
+                + "e''=" + DecimalUtils::to_string(x_model.e2) + " "
+                + "t''=" + DecimalUtils::to_string(x_model.t2) + " "
+                + "     "
+                + "x= " + DecimalUtils::to_string(x_model.x) + " "
+                + "a= " + DecimalUtils::to_string(x_model.a) + " "
+                + "Qvej= " + DecimalUtils::to_string(x_model.Qevj) + " "
+                + "y= " + DecimalUtils::to_string(x_model.y) + " \n\n";
+    }
+    QFile file(path + "/基准数据.txt");
+    file.open(QIODevice::ReadWrite);
+    file.write(tmp_str.c_str());
+    file.close();
 }
 
 void MainWindow::on_menu_build()

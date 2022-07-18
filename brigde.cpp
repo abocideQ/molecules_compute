@@ -114,6 +114,11 @@ std::vector<CoordinateModel> Brigde::getBasicData()
     return m_pComputePlot->computBasicPlots(m_ret_vec_xModel);
 }
 
+std::vector<XModel> Brigde::getBasicXModel()
+{
+    return m_ret_vec_xModel;
+}
+
 long double Brigde::compute_q()
 {
     m_ret_Q = 0;
