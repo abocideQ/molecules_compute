@@ -35,7 +35,7 @@ SOURCES += \
 #    core/FileUtils.cpp \
 #    core/FileWriter.cpp \
 #    core/DecimalUtils.cpp \
- \#    gmp/gmp.cpp \
+#    gmp/gmp.cpp \
 
 
 HEADERS += \
@@ -57,14 +57,14 @@ HEADERS += \
     core/FileWriter.h \
     core/DecimalUtils.h \
 #    core/LongDouble.h \
-    gmp/gmp.h \ \
+#    gmp/gmp.h \ \
 
 
 FORMS += \
     mainwindow.ui \
 
-LIBS += \
-    -L$$PWD/gmp/ -llibgmp-10 \
+#LIBS += \
+#   -L$$PWD/gmp/ -llibgmp-10 \
 #LIBS += -llibgmp-10
 #win32: LIBS += -L$$PWD/ -llibgmp-10
 #INCLUDEPATH += $$PWD/

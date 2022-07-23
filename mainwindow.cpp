@@ -337,32 +337,83 @@ void MainWindow::on_menu_basic_export()
     if (path.isEmpty()){
         return;
     }
+    //±1 = j1-j2
     std::string tmp_str = "";
     for(size_t i = 0; i < vec_x.size(); i++){
         XModel x_model = vec_x[i];
+        if(x_model.j1 == x_model.j2)
+        {
+            continue;
+        }
         tmp_str +=
-//                "g'=" + x_model.g1 + ", "
+                //                "g'=" + x_model.g1 + ", "
                 "v'=" + DecimalUtils::to_string(x_model.v1) + " "
-//                + "j'=" + DecimalUtils::to_string(x_model.j1) + " "
-//                + "e'=" + DecimalUtils::to_string(x_model.e1) + " "
-//                + "t'=" + DecimalUtils::to_string(x_model.t1) + " "
-//                + "     "
-//                + "g''=" + x_model.g2 + ", "
+                //                + "j'=" + DecimalUtils::to_string(x_model.j1) + " "
+                //                + "e'=" + DecimalUtils::to_string(x_model.e1) + " "
+                //                + "t'=" + DecimalUtils::to_string(x_model.t1) + " "
+                //                + "     "
+                //                + "g''=" + x_model.g2 + ", "
                 + "v''=" + DecimalUtils::to_string(x_model.v2) + " "
-//                + "j''=" + DecimalUtils::to_string(x_model.j2) + " "
-//                + "e''=" + DecimalUtils::to_string(x_model.e2) + " "
-//                + "t''=" + DecimalUtils::to_string(x_model.t2) + " "
-//                + "     "
+                //                + "j''=" + DecimalUtils::to_string(x_model.j2) + " "
+                //                + "e''=" + DecimalUtils::to_string(x_model.e2) + " "
+                //                + "t''=" + DecimalUtils::to_string(x_model.t2) + " "
+                //                + "     "
                 + "x=" + DecimalUtils::to_string(x_model.x) + " "
-                + "Aul*Qevj=" + DecimalUtils::to_string(x_model.a * x_model.Qevj) + " "
-//                + "Qvej= " + DecimalUtils::to_string(x_model.Qevj) + " "
-//                + "y= " + DecimalUtils::to_string(x_model.y)
-                + " \n\n";
+                + "Qevj=" + DecimalUtils::to_string(x_model.Qevj) + " "
+                //                + "Qvej= " + DecimalUtils::to_string(x_model.Qevj) + " "
+                //                + "y= " + DecimalUtils::to_string(x_model.y)
+                + "\n";
     }
-    QFile file(path + "/基准数据.txt");
-    file.open(QIODevice::ReadWrite);
-    file.write(tmp_str.c_str());
-    file.close();
+    QFile file1(path + "/基准数据-+1=j1-j2.txt");
+    file1.open(QIODevice::ReadWrite);
+    file1.write(tmp_str.c_str());
+    file1.close();
+    //-1 = j1-j2
+    tmp_str = "";
+    for(size_t i = 0; i < vec_x.size(); i++){
+        XModel x_model = vec_x[i];
+        if(x_model.j1 == x_model.j2)
+        {
+            continue;
+        }
+        if(x_model.j1 - x_model.j2 == 1)
+        {
+            continue;
+        }
+        tmp_str +=
+                "v'=" + DecimalUtils::to_string(x_model.v1) + " "
+                + "v''=" + DecimalUtils::to_string(x_model.v2) + " "
+                + "x=" + DecimalUtils::to_string(x_model.x) + " "
+                + "Qevj=" + DecimalUtils::to_string(x_model.Qevj) + " "
+                + "\n";
+    }
+    QFile file2(path + "/基准数据-1=j1-j2.txt");
+    file2.open(QIODevice::ReadWrite);
+    file2.write(tmp_str.c_str());
+    file2.close();
+    //1 = j1-j2
+    tmp_str = "";
+    for(size_t i = 0; i < vec_x.size(); i++){
+        XModel x_model = vec_x[i];
+        if(x_model.j1 == x_model.j2)
+        {
+            continue;
+        }
+        if(x_model.j1 - x_model.j2 == -1)
+        {
+            continue;
+        }
+        tmp_str +=
+                "v'=" + DecimalUtils::to_string(x_model.v1) + " "
+                + "v''=" + DecimalUtils::to_string(x_model.v2) + " "
+                + "x=" + DecimalUtils::to_string(x_model.x) + " "
+                + "Qevj=" + DecimalUtils::to_string(x_model.Qevj) + " "
+                + "\n";
+    }
+    QFile file3(path + "/基准数据1=j1-j2.txt");
+    file3.open(QIODevice::ReadWrite);
+    file3.write(tmp_str.c_str());
+    file3.close();
 }
 
 void MainWindow::on_menu_build()
@@ -381,9 +432,33 @@ void MainWindow::on_menu_build()
     if (!ret_ok || weight < 0){
         return;
     }
-    try {
-        std::thread t(&Brigde::compute, m_pBrigde, min, max, 0.02, weight);
-        t.join();
+    float step = QInputDialog::getText(this, tr("step"),tr("step"), QLineEdit::Normal, 0, &ret_ok).toFloat();
+    if (!ret_ok || weight < 0){
+        return;
+    }
+    //    try {
+    //        std::thread t(&Brigde::compute, m_pBrigde, min, max, step, weight);
+    //        t.join();
+    //        vector<CoordinateModel> vec_coordinate = m_pBrigde->getData();
+    //        // plot
+    //        QVector<double> m_x(vec_coordinate.size()), m_y(vec_coordinate.size());
+    //        for (size_t i = 0; i < vec_coordinate.size(); i++)
+    //        {
+    //            m_x[i] = vec_coordinate[i].x;
+    //            m_y[i] = vec_coordinate[i].y;
+    //        }
+    //        m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
+    //        m_pQCumstomPlot->graph(0)->rescaleAxes();
+    //        m_pQCumstomPlot->replot();
+    //    } catch (exception e) {
+    //        std::cout << e.what();
+    //    }
+
+    QFutureWatcher<void> *pwatcher = new QFutureWatcher<void>;
+    pwatcher->setFuture(QtConcurrent::run([=]() {
+        m_pBrigde->compute(min, max, step, weight);
+    }));
+    connect(pwatcher, &QFutureWatcher<void>::finished, this, [=]() {
         vector<CoordinateModel> vec_coordinate = m_pBrigde->getData();
         // plot
         QVector<double> m_x(vec_coordinate.size()), m_y(vec_coordinate.size());
@@ -395,9 +470,7 @@ void MainWindow::on_menu_build()
         m_pQCumstomPlot->graph(0)->setData(m_x, m_y);
         m_pQCumstomPlot->graph(0)->rescaleAxes();
         m_pQCumstomPlot->replot();
-    } catch (exception e) {
-        std::cout << e.what();
-    }
+    });
 }
 
 //科学计数法

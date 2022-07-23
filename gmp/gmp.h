@@ -1,4 +1,4 @@
-/* Definitions for GNU multiple precision functions.   -*- mode: c -*-
+ Definitions for GNU multiple precision functions.   -*- mode: c -*-
 
 Copyright 1991, 1993, 1994, 1995, 1996, 1997, 1999, 2000, 2001, 2002,
 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 Free
@@ -149,10 +149,10 @@ typedef unsigned long int	mp_bitcnt_t;
 typedef struct
 {
   int _mp_alloc;		/* Number of *limbs* allocated and pointed
-				   to by the _mp_d field.  */
+                   to by the _mp_d field.  */
   int _mp_size;			/* abs(_mp_size) is the number of limbs the
-				   last field points to.  If _mp_size is
-				   negative this is a negative number.  */
+                   last field points to.  If _mp_size is
+                   negative this is a negative number.  */
   mp_limb_t *_mp_d;		/* Pointer to the limbs.  */
 } __mpz_struct;
 
@@ -187,12 +187,12 @@ typedef __mpq_struct mpq_t[1];
 typedef struct
 {
   int _mp_prec;			/* Max precision, in number of `mp_limb_t's.
-				   Set by mpf_init and modified by
-				   mpf_set_prec.  The area pointed to by the
-				   _mp_d field contains `prec' + 1 limbs.  */
+                   Set by mpf_init and modified by
+                   mpf_set_prec.  The area pointed to by the
+                   _mp_d field contains `prec' + 1 limbs.  */
   int _mp_size;			/* abs(_mp_size) is the number of limbs the
-				   last field points to.  If _mp_size is
-				   negative this is a negative number.  */
+                   last field points to.  If _mp_size is
+                   negative this is a negative number.  */
   mp_exp_t _mp_exp;		/* Exponent, in the base of `mp_limb_t'.  */
   mp_limb_t *_mp_d;		/* Pointer to the limbs.  */
 } __mpf_struct;
@@ -479,8 +479,8 @@ using std::FILE;
 
 #define mp_set_memory_functions __gmp_set_memory_functions
 __GMP_DECLSPEC void mp_set_memory_functions (void *(*) (size_t),
-				      void *(*) (void *, size_t, size_t),
-				      void (*) (void *, size_t)) __GMP_NOTHROW;
+                      void *(*) (void *, size_t, size_t),
+                      void (*) (void *, size_t)) __GMP_NOTHROW;
 
 #define mp_get_memory_functions __gmp_get_memory_functions
 __GMP_DECLSPEC void mp_get_memory_functions (void *(**) (size_t),
@@ -1646,7 +1646,7 @@ mpz_abs (mpz_ptr __gmp_w, mpz_srcptr __gmp_u)
   mp_size_t  __gmp_n = z->_mp_size;					\
   mp_ptr  __gmp_p = z->_mp_d;						\
   return (__gmp_n == 0 || (__gmp_n == 1 && __gmp_p[0] <= maxval)	\
-	  || (__gmp_n == 2 && __gmp_p[1] <= ((mp_limb_t) maxval >> GMP_NUMB_BITS)));
+      || (__gmp_n == 2 && __gmp_p[1] <= ((mp_limb_t) maxval >> GMP_NUMB_BITS)));
 #endif
 
 #if defined (__GMP_EXTERN_INLINE) || defined (__GMP_FORCE_mpz_fits_uint_p)
@@ -1904,36 +1904,36 @@ mpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
   do {								\
     mp_size_t  __gmp_i;						\
     mp_limb_t  __gmp_x, __gmp_r;                                \
-								\
+                                \
     /* ASSERT ((n) >= 1); */					\
     /* ASSERT (MPN_SAME_OR_SEPARATE_P (dst, src, n)); */	\
-								\
+                                \
     __gmp_x = (src)[0];						\
     __gmp_r = __gmp_x OP (v);                                   \
     (dst)[0] = __gmp_r;						\
     if (CB (__gmp_r, __gmp_x, (v)))                             \
       {								\
-	(cout) = 1;						\
-	for (__gmp_i = 1; __gmp_i < (n);)                       \
-	  {							\
-	    __gmp_x = (src)[__gmp_i];                           \
-	    __gmp_r = __gmp_x OP 1;                             \
-	    (dst)[__gmp_i] = __gmp_r;                           \
-	    ++__gmp_i;						\
-	    if (!CB (__gmp_r, __gmp_x, 1))                      \
-	      {							\
-		if ((src) != (dst))				\
-		  __GMPN_COPY_REST (dst, src, n, __gmp_i);      \
-		(cout) = 0;					\
-		break;						\
-	      }							\
-	  }							\
+    (cout) = 1;						\
+    for (__gmp_i = 1; __gmp_i < (n);)                       \
+      {							\
+        __gmp_x = (src)[__gmp_i];                           \
+        __gmp_r = __gmp_x OP 1;                             \
+        (dst)[__gmp_i] = __gmp_r;                           \
+        ++__gmp_i;						\
+        if (!CB (__gmp_r, __gmp_x, 1))                      \
+          {							\
+        if ((src) != (dst))				\
+          __GMPN_COPY_REST (dst, src, n, __gmp_i);      \
+        (cout) = 0;					\
+        break;						\
+          }							\
+      }							\
       }								\
     else							\
       {								\
-	if ((src) != (dst))					\
-	  __GMPN_COPY_REST (dst, src, n, 1);			\
-	(cout) = 0;						\
+    if ((src) != (dst))					\
+      __GMPN_COPY_REST (dst, src, n, 1);			\
+    (cout) = 0;						\
       }								\
   } while (0)
 #endif
@@ -1943,36 +1943,36 @@ mpq_neg (mpq_ptr __gmp_w, mpq_srcptr __gmp_u)
   do {								\
     mp_size_t  __gmp_i;						\
     mp_limb_t  __gmp_x, __gmp_r;				\
-								\
+                                \
     /* ASSERT ((n) >= 1); */					\
     /* ASSERT (MPN_SAME_OR_SEPARATE_P (dst, src, n)); */	\
-								\
+                                \
     __gmp_x = (src)[0];						\
     __gmp_r = __gmp_x OP (v);					\
     (dst)[0] = __gmp_r & GMP_NUMB_MASK;				\
     if (__gmp_r >> GMP_NUMB_BITS != 0)				\
       {								\
-	(cout) = 1;						\
-	for (__gmp_i = 1; __gmp_i < (n);)			\
-	  {							\
-	    __gmp_x = (src)[__gmp_i];				\
-	    __gmp_r = __gmp_x OP 1;				\
-	    (dst)[__gmp_i] = __gmp_r & GMP_NUMB_MASK;		\
-	    ++__gmp_i;						\
-	    if (__gmp_r >> GMP_NUMB_BITS == 0)			\
-	      {							\
-		if ((src) != (dst))				\
-		  __GMPN_COPY_REST (dst, src, n, __gmp_i);	\
-		(cout) = 0;					\
-		break;						\
-	      }							\
-	  }							\
+    (cout) = 1;						\
+    for (__gmp_i = 1; __gmp_i < (n);)			\
+      {							\
+        __gmp_x = (src)[__gmp_i];				\
+        __gmp_r = __gmp_x OP 1;				\
+        (dst)[__gmp_i] = __gmp_r & GMP_NUMB_MASK;		\
+        ++__gmp_i;						\
+        if (__gmp_r >> GMP_NUMB_BITS == 0)			\
+          {							\
+        if ((src) != (dst))				\
+          __GMPN_COPY_REST (dst, src, n, __gmp_i);	\
+        (cout) = 0;					\
+        break;						\
+          }							\
+      }							\
       }								\
     else							\
       {								\
-	if ((src) != (dst))					\
-	  __GMPN_COPY_REST (dst, src, n, 1);			\
-	(cout) = 0;						\
+    if ((src) != (dst))					\
+      __GMPN_COPY_REST (dst, src, n, 1);			\
+    (cout) = 0;						\
       }								\
   } while (0)
 #endif
@@ -2226,4 +2226,4 @@ enum
 #define __GNU_MP_RELEASE (__GNU_MP_VERSION * 10000 + __GNU_MP_VERSION_MINOR * 100 + __GNU_MP_VERSION_PATCHLEVEL)
 
 #define __GMP_H__
-#endif /* __GMP_H__ */
+#endif /* __GMP_H__

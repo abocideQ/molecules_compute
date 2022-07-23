@@ -7,6 +7,8 @@
 #include "brigde.h"
 #include "qhandler.h"
 #include <thread>
+#include <QApplication>
+#include <QtConcurrent/QtConcurrent>
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

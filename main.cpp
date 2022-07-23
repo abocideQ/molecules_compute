@@ -1,6 +1,6 @@
 #include <QApplication>
 #include "mainwindow.h"
-#include "gmp/gmp.h"
+//#include "gmp/gmp.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
     return a.exec();
 }
 
-void init_gmp(){
+//void init_gmp(){
     //=====================mpf
     //初始化
 //    mpf_t mp_float;
@@ -44,4 +44,4 @@ void init_gmp(){
 //       qDebug(std::to_string(mpq_get_d(mp_qua)).c_str());
 //       char *sss = mpq_get_str(nullptr, 10 ,mp_qua);
 //       qDebug(sss);
-}
+//}
